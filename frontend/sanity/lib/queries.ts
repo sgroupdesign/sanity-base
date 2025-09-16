@@ -1,4 +1,4 @@
-import { defineQuery } from "next-sanity";
+import {defineQuery} from 'next-sanity'
 
 const postFields = /* groq */ `
   _id,
@@ -10,14 +10,14 @@ const postFields = /* groq */ `
   "date": coalesce(date, _updatedAt),
   "author": author->{name, image},
   metadata,
-`;
+`
 
 const linkReference = /* groq */ `
   _type == "link" => {
     "page": page->slug.current,
     "post": post->slug.current
   }
-`;
+`
 
 const testimonialReference = /* groq */ `
   _type == "testimonial" => {
@@ -28,19 +28,19 @@ const testimonialReference = /* groq */ `
       picture,
     }
   }
-`;
+`
 
 export const linkQuery = /* groq */ `
 	...,
 	internal->{ _type, title, slug }
-`;
+`
 
 const linkFields = /* groq */ `
   link {
     ...,
     ${linkReference}
     }
-`;
+`
 
 const navigationQuery = /* groq */ `
 	title,
@@ -51,7 +51,7 @@ const navigationQuery = /* groq */ `
       ...,
       ${linkReference} }
 	}
-`;
+`
 
 export const settingsQuery = defineQuery(`
 *[_type == "settings"][0]{
@@ -65,7 +65,7 @@ export const settingsQuery = defineQuery(`
   headerMenu->{ ${navigationQuery} },
   footerMenu->{ ${navigationQuery} },
   social->{ ${navigationQuery} },
-}`);
+}`)
 
 export const pageBuilerQuery = /* groq */ `
   "pageBuilder": pageBuilder[]{
@@ -131,12 +131,12 @@ export const pageBuilerQuery = /* groq */ `
       },
     },
   },
-`;
+`
 
 export const getPageQuery = defineQuery(`
   *[_type == 'page' &&
 			slug.current == $slug &&
-			!(slug.current in ['index', 'posts/*', 'people/*'])
+			!(slug.current in ['index', 'posts/*', 'people/*', '404'])
 		][0]{
     _id,
     _type,
@@ -154,7 +154,7 @@ export const getPageQuery = defineQuery(`
     metadata,
     ${pageBuilerQuery}
   }
-`);
+`)
 
 export const getHomePageQuery = defineQuery(`
   *[_type == 'page' && slug.current == 'index'][0]{
@@ -174,7 +174,27 @@ export const getHomePageQuery = defineQuery(`
     metadata,
     ${pageBuilerQuery}
   }
-`);
+`)
+
+export const get404PageQuery = defineQuery(`
+  *[_type == 'page' && slug.current == '404'][0]{
+    _id,
+    _type,
+    name,
+    slug,
+    heading,
+    subHeading,
+    pageHeaderImage,
+    eyebrow,
+    content,
+    theme,
+    ctas[]{
+      ${linkFields} 
+    },
+    metadata,
+    ${pageBuilerQuery}
+  }
+`)
 
 export const sitemapData = defineQuery(`
   *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {
@@ -182,19 +202,19 @@ export const sitemapData = defineQuery(`
     _type,
     _updatedAt,
   }
-`);
+`)
 
 export const allPostsQuery = defineQuery(`
   *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {
     ${postFields}
   }
-`);
+`)
 
 export const morePostsQuery = defineQuery(`
   *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {
     ${postFields}
   }
-`);
+`)
 
 export const postQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
@@ -207,14 +227,14 @@ export const postQuery = defineQuery(`
   },
     ${postFields}
   }
-`);
+`)
 
 export const postPagesSlugs = defineQuery(`
   *[_type == "post" && defined(slug.current)]
   {"slug": slug.current}
-`);
+`)
 
 export const pagesSlugs = defineQuery(`
   *[_type == "page" && defined(slug.current)]
   {"slug": slug.current}
-`);
+`)

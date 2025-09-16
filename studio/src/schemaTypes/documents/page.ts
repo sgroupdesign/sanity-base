@@ -1,5 +1,5 @@
-import {GrDocument} from 'react-icons/gr'
-import {defineField, defineType} from 'sanity'
+import { GrDocument } from 'react-icons/gr'
+import { defineField, defineType } from 'sanity'
 
 /**
  * Page schema.  Define and edit the fields for the 'page' content type.

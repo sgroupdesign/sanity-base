@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Head from "next/head";
+import { notFound } from 'next/navigation';
 
 import PageBuilderPage from "@/app/components/PageBuilder";
 import { GetPageQueryResult } from "@/sanity.types";
@@ -52,6 +53,8 @@ export default async function Page(props: Props) {
   const [{ data: page }] = await Promise.all([
     sanityFetch({ query: getPageQuery, params }),
   ]);
+
+  if (!page) notFound()
 
   return (
     <div className="">

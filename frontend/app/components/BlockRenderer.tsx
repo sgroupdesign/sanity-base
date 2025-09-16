@@ -1,17 +1,18 @@
-import React from 'react'
+import React from 'react';
 
-import Cta from '@/app/components/Cta'
-import Info from '@/app/components/InfoSection'
-import {dataAttr} from '@/sanity/lib/utils'
+import Cta from "@/app/components/Cta";
+import Info from "@/app/components/InfoSection";
+import { dataAttr } from "@/sanity/lib/utils";
 
 type BlocksType = {
   [key: string]: React.FC<any>
 }
 
 type BlockType = {
-  _type: string
-  _key: string
-}
+  _type: string;
+  _key: string;
+  enabled: boolean;
+};
 
 type BlockProps = {
   index: number
@@ -34,6 +35,7 @@ export default function BlockRenderer({block, index, pageId, pageType}: BlockPro
     return (
       <div
         key={block._key}
+        data-type={block._type}
         data-sanity={dataAttr({
           id: pageId,
           type: pageType,

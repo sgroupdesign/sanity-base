@@ -1,4 +1,4 @@
-import {UserIcon} from '@sanity/icons'
+import {RxAvatar} from 'react-icons/rx'
 import {defineField, defineType} from 'sanity'
 
 /**
@@ -9,25 +9,44 @@ import {defineField, defineType} from 'sanity'
 export const person = defineType({
   name: 'person',
   title: 'Person',
-  icon: UserIcon,
+  icon: RxAvatar,
   type: 'document',
+  groups: [
+    {name: 'content', default: true},
+    {name: 'seo', title: 'SEO'},
+  ],
   fields: [
     defineField({
-      name: 'firstName',
-      title: 'First Name',
+      name: 'name',
+      title: 'Name',
       type: 'string',
-      validation: (rule) => rule.required(),
+      validation: (Rule) => Rule.required(),
+      group: 'content',
+    }),
+
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      validation: (Rule) => Rule.required(),
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
+      description: 'URL path. Use "index" for the homepage.',
+      group: 'content',
     }),
     defineField({
-      name: 'lastName',
-      title: 'Last Name',
+      name: 'jobTitle',
+      title: 'Job Title',
       type: 'string',
-      validation: (rule) => rule.required(),
+      group: 'content',
     }),
     defineField({
-      name: 'picture',
-      title: 'Picture',
+      name: 'image',
+      title: 'Image',
       type: 'image',
+      group: 'content',
       fields: [
         defineField({
           name: 'alt',
@@ -37,7 +56,7 @@ export const person = defineType({
           validation: (rule) => {
             // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
             return rule.custom((alt, context) => {
-              if ((context.document?.picture as any)?.asset?._ref && !alt) {
+              if ((context.document?.image as any)?.asset?._ref && !alt) {
                 return 'Required'
               }
               return true
@@ -53,19 +72,29 @@ export const person = defineType({
       },
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'content',
+      title: 'Content',
+      type: 'blockContent',
+      group: 'content',
+    }),
+    defineField({
+      name: 'metadata',
+      type: 'metadata',
+      group: 'seo',
+    }),
   ],
   // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {
     select: {
-      firstName: 'firstName',
-      lastName: 'lastName',
-      picture: 'picture',
+      name: 'name',
+      image: 'image',
     },
     prepare(selection) {
       return {
-        title: `${selection.firstName} ${selection.lastName}`,
+        title: `${selection.name}`,
         subtitle: 'Person',
-        media: selection.picture,
+        media: selection.image,
       }
     },
   },

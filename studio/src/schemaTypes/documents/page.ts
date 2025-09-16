@@ -1,5 +1,5 @@
+import {GrDocument} from 'react-icons/gr'
 import {defineField, defineType} from 'sanity'
-import {DocumentIcon} from '@sanity/icons'
 
 /**
  * Page schema.  Define and edit the fields for the 'page' content type.
@@ -10,13 +10,19 @@ export const page = defineType({
   name: 'page',
   title: 'Page',
   type: 'document',
-  icon: DocumentIcon,
+  icon: GrDocument,
+  groups: [
+    {name: 'content', default: true},
+    {name: 'pageHeader', title: 'Page Header'},
+    {name: 'seo', title: 'SEO'},
+  ],
   fields: [
     defineField({
       name: 'name',
       title: 'Name',
       type: 'string',
       validation: (Rule) => Rule.required(),
+      group: 'content',
     }),
 
     defineField({
@@ -28,23 +34,73 @@ export const page = defineType({
         source: 'name',
         maxLength: 96,
       },
+      description: 'URL path. Use "index" for the homepage.',
+      group: 'content',
+    }),
+    defineField({
+      name: 'pageHeaderImage',
+      title: 'Page Header image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          type: 'string',
+        }),
+      ],
+      group: 'pageHeader',
+    }),
+    defineField({
+      name: 'eyebrow',
+      type: 'string',
+      group: 'pageHeader',
     }),
     defineField({
       name: 'heading',
-      title: 'Heading',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      group: 'pageHeader',
     }),
     defineField({
-      name: 'subheading',
-      title: 'Subheading',
+      name: 'subHeading',
       type: 'string',
+      group: 'pageHeader',
+    }),
+    defineField({
+      name: 'content',
+      type: 'text',
+      rows: 3,
+      group: 'pageHeader',
+    }),
+    defineField({
+      name: 'ctas',
+      title: 'Call-to-actions',
+      type: 'array',
+      of: [{type: 'callToAction'}],
+      group: 'pageHeader',
+    }),
+    defineField({
+      name: 'theme',
+      type: 'string',
+      options: {
+        list: ['light', 'dark', 'muted'],
+        layout: 'radio',
+      },
+      initialValue: 'light',
+      group: 'pageHeader',
     }),
     defineField({
       name: 'pageBuilder',
       title: 'Page builder',
       type: 'array',
-      of: [{type: 'callToAction'}, {type: 'infoSection'}],
+      of: [
+        {type: 'cards'},
+        {type: 'heroSplit'},
+        {type: 'hero'},
+        {type: 'infoSection'},
+        {type: 'testimonials'},
+      ],
       options: {
         insertMenu: {
           // Configure the "Add Item" menu to display a thumbnail preview of the content type. https://www.sanity.io/docs/array-type#efb1fe03459d
@@ -52,11 +108,17 @@ export const page = defineType({
             {
               name: 'grid',
               previewImageUrl: (schemaTypeName) =>
-                `/static/page-builder-thumbnails/${schemaTypeName}.webp`,
+                `/static/page-builder-thumbnails/${schemaTypeName}.png`,
             },
           ],
         },
       },
+      group: 'content',
+    }),
+    defineField({
+      name: 'metadata',
+      type: 'metadata',
+      group: 'seo',
     }),
   ],
 })

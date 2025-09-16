@@ -1,20 +1,19 @@
-import './globals.css'
+import './globals.css';
 
-import {SpeedInsights} from '@vercel/speed-insights/next'
-import type {Metadata} from 'next'
-import {Inter} from 'next/font/google'
-import {draftMode} from 'next/headers'
-import {VisualEditing, toPlainText} from 'next-sanity'
-import {Toaster} from 'sonner'
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
+import { VisualEditing } from "next-sanity";
+import { Inter } from "next/font/google";
+import { draftMode } from "next/headers";
+import { Toaster } from "sonner";
 
-import DraftModeToast from '@/app/components/DraftModeToast'
-import Footer from '@/app/components/Footer'
-import Header from '@/app/components/Header'
-import * as demo from '@/sanity/lib/demo'
-import {sanityFetch, SanityLive} from '@/sanity/lib/live'
-import {settingsQuery} from '@/sanity/lib/queries'
-import {resolveOpenGraphImage} from '@/sanity/lib/utils'
-import {handleError} from './client-utils'
+import DraftModeToast from "@/app/components/DraftModeToast";
+import Footer from "@/app/components/Footer";
+import Header from "@/app/components/Header";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+import { settingsQuery } from "@/sanity/lib/queries";
+import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import { handleError } from "./client-utils";
 
 /**
  * Generate metadata for the page.
@@ -25,9 +24,9 @@ export async function generateMetadata(): Promise<Metadata> {
     query: settingsQuery,
     // Metadata should never contain stega
     stega: false,
-  })
-  const title = settings?.title || demo.title
-  const description = settings?.description || demo.description
+  });
+  const title = settings?.companyName;
+  const description = settings?.description;
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage)
   let metadataBase: URL | undefined = undefined
@@ -42,13 +41,16 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase,
     title: {
       template: `%s | ${title}`,
-      default: title,
+      default: title ?? "",
     },
-    description: toPlainText(description),
+    description: description,
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },
-  }
+    robots: {
+      index: true,
+    },
+  };
 }
 
 const inter = Inter({

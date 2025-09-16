@@ -1,15 +1,15 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { type PortableTextBlock } from "next-sanity";
-import { Suspense } from "react";
 
 import Avatar from "@/app/components/Avatar";
 import CoverImage from "@/app/components/CoverImage";
-import { MorePosts } from "@/app/components/Posts";
 import PortableText from "@/app/components/PortableText";
+import { MorePosts } from "@/app/components/Posts";
 import { sanityFetch } from "@/sanity/lib/live";
 import { postPagesSlugs, postQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import { type PortableTextBlock } from "next-sanity";
+import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -35,7 +35,7 @@ export async function generateStaticParams() {
  */
 export async function generateMetadata(
   props: Props,
-  parent: ResolvingMetadata,
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const params = await props.params;
   const { data: post } = await sanityFetch({
@@ -45,15 +45,12 @@ export async function generateMetadata(
     stega: false,
   });
   const previousImages = (await parent).openGraph?.images || [];
-  const ogImage = resolveOpenGraphImage(post?.coverImage);
+  const ogImage = resolveOpenGraphImage(post?.image);
 
   return {
-    authors:
-      post?.author?.firstName && post?.author?.lastName
-        ? [{ name: `${post.author.firstName} ${post.author.lastName}` }]
-        : [],
-    title: post?.title,
-    description: post?.excerpt,
+    authors: post?.author?.name ? [{ name: `${post.author.name}` }] : [],
+    title: post?.metadata?.title ?? post?.title,
+    description: post?.metadata?.description,
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },
@@ -72,46 +69,63 @@ export default async function PostPage(props: Props) {
 
   return (
     <>
-      <div className="">
-        <div className="container my-12 lg:my-24 grid gap-12">
-          <div>
-            <div className="pb-6 grid gap-6 mb-6 border-b border-gray-100">
-              <div className="max-w-3xl flex flex-col gap-6">
-                <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-7xl">
-                  {post.title}
-                </h2>
-              </div>
-              <div className="max-w-3xl flex gap-4 items-center">
-                {post.author &&
-                  post.author.firstName &&
-                  post.author.lastName && (
-                    <Avatar person={post.author} date={post.date} />
-                  )}
-              </div>
-            </div>
-            <article className="gap-6 grid max-w-4xl">
-              <div className="">
-                {post?.coverImage && (
-                  <CoverImage image={post.coverImage} priority />
+      <section
+        className="relative py-6 lg:p-20 bg-background text-foreground"
+        data-theme="muted"
+      >
+        <div className="container relative grid grid-cols-1 gap-8 lg:gap-x-20 lg:grid-cols-2 items-center">
+          <div className="lg:order-1">
+            {post.image && (
+              <CoverImage
+                image={post.image}
+                loading={"lazy"}
+                className=""
+                width={1500}
+                height={1500}
+              />
+            )}
+          </div>
+
+          <div className="relative mx-auto flex w-full flex-col">
+            <div className="flex flex-col gap-6 items-center">
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-0">
+                  <p className="eyebrow">Design</p>
+
+                  {post.title && <h1 className="h1">{post.title}</h1>}
+                </div>
+
+                {post.author && (
+                  <Avatar
+                    person={post.author}
+                    date={post.date}
+                    key={post._id}
+                  />
                 )}
               </div>
-              {post.content?.length && (
-                <PortableText
-                  className="max-w-2xl"
-                  value={post.content as PortableTextBlock[]}
-                />
-              )}
-            </article>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="border-t border-gray-100 bg-gray-50">
-        <div className="container py-12 lg:py-24 grid gap-12">
-          <aside>
-            <Suspense>{await MorePosts({ skip: post._id, limit: 2 })}</Suspense>
-          </aside>
+      </section>
+      <div className="">
+        <div className="container my-12 lg:my-24 max-w-5xl">
+          <article className="richtext">
+            {post.content?.length && (
+              <PortableText value={post.content as PortableTextBlock[]} />
+            )}
+          </article>
         </div>
       </div>
+      <section
+        className="relative py-6 lg:p-20 bg-background text-foreground"
+        data-theme="muted"
+      >
+        <div className="container">
+          <aside>
+            <Suspense>{await MorePosts({ skip: post._id, limit: 3 })}</Suspense>
+          </aside>
+        </div>
+      </section>
     </>
   );
 }

@@ -13,16 +13,163 @@
  */
 
 // Source: schema.json
-export type CallToAction = {
-  _type: "callToAction";
-  heading: string;
-  text?: string;
-  buttonText?: string;
+export type Cards = {
+  _type: "cards";
+  eyebrow?: string;
+  heading?: string;
+  source?: "static" | "dynamic";
+  dynamicCards?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "page";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "person";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "post";
+  }>;
+  cards?: Array<{
+    _key: string;
+  } & Card>;
+  ctas?: Array<{
+    _key: string;
+  } & CallToAction>;
+  theme?: "light" | "dark" | "muted";
+  centerAligned?: boolean;
+  layout?: "grid" | "carousel";
+  enabled?: boolean;
+};
+
+export type Card = {
+  _type: "card";
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  title?: string;
+  description?: string;
   link?: Link;
+};
+
+export type Hero = {
+  _type: "hero";
+  eyebrow?: string;
+  heading?: string;
+  subHeading?: string;
+  content?: string;
+  ctas?: Array<{
+    _key: string;
+  } & CallToAction>;
+  bgImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    loading?: "lazy" | "eager";
+    _type: "image";
+  };
+  theme?: "light" | "dark" | "muted";
+  layout?: "stacked" | "floated";
+  overlayOpacity?: "0" | "20" | "40" | "60" | "80" | "100";
+  textAlign?: "left" | "center";
+  alignItems?: "start" | "center" | "end" | "justify";
+  enabled?: boolean;
+};
+
+export type Testimonials = {
+  _type: "testimonials";
+  testimonials?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "testimonial";
+  }>;
+  theme?: "light" | "dark" | "muted";
+  enabled?: boolean;
+};
+
+export type HeroSplit = {
+  _type: "heroSplit";
+  eyebrow?: string;
+  heading?: string;
+  subHeading?: string;
+  content?: string;
+  ctas?: Array<{
+    _key: string;
+  } & CallToAction>;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    onRight?: boolean;
+    loading?: "lazy" | "eager";
+    _type: "image";
+  };
+  theme?: "light" | "dark" | "muted";
+  textAlign?: "left" | "center";
+  alignItems?: "start" | "center" | "end" | "justify";
+  enabled?: boolean;
+};
+
+export type LinkList = {
+  _type: "link.list";
+  link?: Link;
+  links?: Array<{
+    _key: string;
+  } & Link>;
+};
+
+export type Gallery = {
+  _type: "gallery";
+  images?: Array<{
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    caption?: string;
+    _key: string;
+  }>;
 };
 
 export type Link = {
   _type: "link";
+  label?: string;
   linkType?: "href" | "page" | "post";
   href?: string;
   page?: {
@@ -42,8 +189,9 @@ export type Link = {
 
 export type InfoSection = {
   _type: "infoSection";
+  eyebrow?: string;
   heading?: string;
-  subheading?: string;
+  subHeading?: string;
   content?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -75,7 +223,31 @@ export type InfoSection = {
     level?: number;
     _type: "block";
     _key: string;
-  }>;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  } | {
+    _key: string;
+  } & Accordion | {
+    _key: string;
+  } & Gallery>;
+  ctas?: Array<{
+    _key: string;
+  } & CallToAction>;
+  theme?: "light" | "dark" | "muted";
+  textAlign?: "left" | "center";
+  layout?: "stacked" | "floated";
+  enabled?: boolean;
 };
 
 export type BlockContent = Array<{
@@ -109,48 +281,62 @@ export type BlockContent = Array<{
   level?: number;
   _type: "block";
   _key: string;
-}>;
+} | {
+  asset?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  };
+  media?: unknown;
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  alt?: string;
+  _type: "image";
+  _key: string;
+} | {
+  _key: string;
+} & Accordion | {
+  _key: string;
+} & Gallery>;
 
-export type Settings = {
+export type Accordion = {
+  _type: "accordion";
+  items?: Array<{
+    summary?: string;
+    content?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    open?: boolean;
+    _key: string;
+  }>;
+};
+
+export type Testimonial = {
   _id: string;
-  _type: "settings";
+  _type: "testimonial";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title: string;
-  description?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      linkType?: "href" | "page" | "post";
-      href?: string;
-      page?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "page";
-      };
-      post?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "post";
-      };
-      openInNewTab?: boolean;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-  ogImage?: {
+  name?: string;
+  jobTitle?: string;
+  content?: string;
+  picture?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -161,8 +347,79 @@ export type Settings = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    metadataBase?: string;
     _type: "image";
+  };
+};
+
+export type Redirect = {
+  _id: string;
+  _type: "redirect";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  source?: string;
+  destination?: string;
+  permanent?: boolean;
+};
+
+export type Form = {
+  _id: string;
+  _type: "form";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  formName?: string;
+  fields?: Array<{
+    label?: string;
+    required?: boolean;
+    _type: "textField";
+    _key: string;
+  } | {
+    label?: string;
+    required?: boolean;
+    _type: "numberField";
+    _key: string;
+  } | {
+    label?: string;
+    options?: Array<string>;
+    required?: boolean;
+    _type: "selectField";
+    _key: string;
+  } | {
+    label?: string;
+    required?: boolean;
+    _type: "emailField";
+    _key: string;
+  } | {
+    label?: string;
+    required?: boolean;
+    _type: "telField";
+    _key: string;
+  } | {
+    label?: string;
+    required?: boolean;
+    _type: "textareaField";
+    _key: string;
+  } | {
+    label?: string;
+    options?: Array<string>;
+    required?: boolean;
+    _type: "checkboxField";
+    _key: string;
+  } | {
+    label?: string;
+    options?: Array<string>;
+    required?: boolean;
+    _type: "radioField";
+    _key: string;
+  }>;
+  recipient?: string;
+  cc?: string;
+  confirmationPage?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "page";
   };
 };
 
@@ -172,15 +429,41 @@ export type Page = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  name: string;
-  slug: Slug;
-  heading: string;
-  subheading?: string;
+  name?: string;
+  slug?: Slug;
+  pageHeaderImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  eyebrow?: string;
+  heading?: string;
+  subHeading?: string;
+  content?: string;
+  ctas?: Array<{
+    _key: string;
+  } & CallToAction>;
+  theme?: "light" | "dark" | "muted";
   pageBuilder?: Array<{
     _key: string;
-  } & CallToAction | {
+  } & Cards | {
     _key: string;
-  } & InfoSection>;
+  } & HeroSplit | {
+    _key: string;
+  } & Hero | {
+    _key: string;
+  } & InfoSection | {
+    _key: string;
+  } & Testimonials>;
+  metadata?: Metadata;
 };
 
 export type Post = {
@@ -189,11 +472,42 @@ export type Post = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title: string;
-  slug: Slug;
-  content?: BlockContent;
-  excerpt?: string;
-  coverImage: {
+  title?: string;
+  slug?: Slug;
+  content?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    caption?: string;
+    alt?: string;
+    loading?: "lazy" | "eager";
+    _type: "image";
+    _key: string;
+  }>;
+  image?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -213,6 +527,7 @@ export type Post = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "person";
   };
+  metadata?: Metadata;
 };
 
 export type Person = {
@@ -221,9 +536,9 @@ export type Person = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  firstName: string;
-  lastName: string;
-  picture: {
+  name?: string;
+  jobTitle?: string;
+  image?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -236,6 +551,92 @@ export type Person = {
     alt?: string;
     _type: "image";
   };
+  content?: BlockContent;
+  metadata?: Metadata;
+};
+
+export type Metadata = {
+  _type: "metadata";
+  title?: string;
+  description?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  noIndex?: boolean;
+};
+
+export type Settings = {
+  _id: string;
+  _type: "settings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  companyName?: string;
+  description?: string;
+  address?: string;
+  email?: string;
+  phone?: string;
+  callToAction?: CallToAction;
+  headerMenu?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "navigation";
+  };
+  footerMenu?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "navigation";
+  };
+  social?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "navigation";
+  };
+  ogImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    metadataBase?: string;
+    _type: "image";
+  };
+};
+
+export type Navigation = {
+  _id: string;
+  _type: "navigation";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  items?: Array<{
+    _key: string;
+  } & Link | {
+    _key: string;
+  } & LinkList>;
+};
+
+export type CallToAction = {
+  _type: "callToAction";
+  link?: Link;
 };
 
 export type SanityAssistInstructionTask = {
@@ -274,7 +675,7 @@ export type SanityAssistOutputField = {
 
 export type SanityAssistInstructionContext = {
   _type: "sanity.assist.instruction.context";
-  reference: {
+  reference?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
@@ -307,7 +708,7 @@ export type AssistInstructionContext = {
 
 export type SanityAssistInstructionUserInput = {
   _type: "sanity.assist.instruction.userInput";
-  message: string;
+  message?: string;
   description?: string;
 };
 
@@ -466,7 +867,7 @@ export type Geopoint = {
 
 export type Slug = {
   _type: "slug";
-  current: string;
+  current?: string;
   source?: string;
 };
 
@@ -477,51 +878,15 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = CallToAction | Link | InfoSection | BlockContent | Settings | Page | Post | Person | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Cards | Card | Hero | Testimonials | HeroSplit | LinkList | Gallery | Link | InfoSection | BlockContent | Accordion | Testimonial | Redirect | Form | Page | Post | Person | Metadata | Settings | Navigation | CallToAction | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
-// Query: *[_type == "settings"][0]
+// Query: *[_type == "settings"][0]{  companyName,  description,  ogImage,  address,  email,  phone,  callToAction{   link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    } },  headerMenu->{ 	title,	items[]{    ...,		  _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  },		links[]{       ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  } }	} },  footerMenu->{ 	title,	items[]{    ...,		  _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  },		links[]{       ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  } }	} },  social->{ 	title,	items[]{    ...,		  _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  },		links[]{       ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  } }	} },}
 export type SettingsQueryResult = {
-  _id: string;
-  _type: "settings";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  description?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      linkType?: "href" | "page" | "post";
-      href?: string;
-      page?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "page";
-      };
-      post?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "post";
-      };
-      openInNewTab?: boolean;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-  ogImage?: {
+  companyName: string | null;
+  description: string | null;
+  ogImage: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -534,37 +899,354 @@ export type SettingsQueryResult = {
     alt?: string;
     metadataBase?: string;
     _type: "image";
-  };
-} | null;
-// Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {          link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      },      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },    },  }
-export type GetPageQueryResult = {
-  _id: string;
-  _type: "page";
-  name: string;
-  slug: Slug;
-  heading: string;
-  subheading: string | null;
-  pageBuilder: Array<{
-    _key: string;
-    _type: "callToAction";
-    heading: string;
-    text?: string;
-    buttonText?: string;
+  } | null;
+  address: string | null;
+  email: string | null;
+  phone: string | null;
+  callToAction: {
     link: {
       _type: "link";
+      label?: string;
       linkType?: "href" | "page" | "post";
       href?: string;
       page: string | null;
       post: string | null;
       openInNewTab?: boolean;
     } | null;
+  } | null;
+  headerMenu: {
+    title: string | null;
+    items: Array<{
+      _key: string;
+      _type: "link.list";
+      link?: Link;
+      links: Array<{
+        _key: string;
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      }> | null;
+    } | {
+      _key: string;
+      _type: "link";
+      label?: string;
+      linkType?: "href" | "page" | "post";
+      href?: string;
+      page: string | null;
+      post: string | null;
+      openInNewTab?: boolean;
+      links: null;
+    }> | null;
+  } | null;
+  footerMenu: {
+    title: string | null;
+    items: Array<{
+      _key: string;
+      _type: "link.list";
+      link?: Link;
+      links: Array<{
+        _key: string;
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      }> | null;
+    } | {
+      _key: string;
+      _type: "link";
+      label?: string;
+      linkType?: "href" | "page" | "post";
+      href?: string;
+      page: string | null;
+      post: string | null;
+      openInNewTab?: boolean;
+      links: null;
+    }> | null;
+  } | null;
+  social: {
+    title: string | null;
+    items: Array<{
+      _key: string;
+      _type: "link.list";
+      link?: Link;
+      links: Array<{
+        _key: string;
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      }> | null;
+    } | {
+      _key: string;
+      _type: "link";
+      label?: string;
+      linkType?: "href" | "page" | "post";
+      href?: string;
+      page: string | null;
+      post: string | null;
+      openInNewTab?: boolean;
+      links: null;
+    }> | null;
+  } | null;
+} | null;
+// Variable: getPageQuery
+// Query: *[_type == 'page' &&			slug.current == $slug &&			!(slug.current in ['index', 'posts/*', 'people/*'])		][0]{    _id,    _type,    name,    slug,    heading,    subHeading,    pageHeaderImage,    eyebrow,    content,    theme,    ctas[]{        link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }     },    metadata,      "pageBuilder": pageBuilder[]{    ...,    _type == "callToAction" => {        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  },    },    _type == "hero" => {      ...,      ctas[]{          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }       },    },    _type == "heroSplit" => {      ...,      ctas[]{          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }       },    },    _type == "infoSection" => {      ...,      ctas[]{          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }       },    },    _type == 'testimonials' => { testimonials[]->{      name,      jobTitle,      content,      picture,    }},    _type == 'cards' => {       cards[]{        title,        name,        description,        image,        pageHeaderImage,        _type,          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    },      },      dynamicCards[]->{        title,        name,        description,        image,        _type,        metadata,        'link': {          'linkType': _type,          "page": slug.current,          "post": slug.current        },      },    },    _type == "infoSection" => {      content[]{        ...,        markDefs[]{          ...,            _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }        }      },    },  },  }
+export type GetPageQueryResult = {
+  _id: string;
+  _type: "page";
+  name: string | null;
+  slug: Slug | null;
+  heading: string | null;
+  subHeading: string | null;
+  pageHeaderImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  eyebrow: string | null;
+  content: string | null;
+  theme: "dark" | "light" | "muted" | null;
+  ctas: Array<{
+    link: {
+      _type: "link";
+      label?: string;
+      linkType?: "href" | "page" | "post";
+      href?: string;
+      page: string | null;
+      post: string | null;
+      openInNewTab?: boolean;
+    } | null;
+  }> | null;
+  metadata: Metadata | null;
+  pageBuilder: Array<{
+    _key: string;
+    _type: "cards";
+    eyebrow?: string;
+    heading?: string;
+    source?: "dynamic" | "static";
+    dynamicCards: Array<{
+      title: null;
+      name: string | null;
+      description: null;
+      image: null;
+      _type: "page";
+      metadata: Metadata | null;
+      link: {
+        linkType: "page";
+        page: string | null;
+        post: string | null;
+      };
+    } | {
+      title: null;
+      name: string | null;
+      description: null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+      _type: "person";
+      metadata: Metadata | null;
+      link: {
+        linkType: "person";
+        page: null;
+        post: null;
+      };
+    } | {
+      title: string | null;
+      name: null;
+      description: null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+      _type: "post";
+      metadata: Metadata | null;
+      link: {
+        linkType: "post";
+        page: string | null;
+        post: string | null;
+      };
+    }> | null;
+    cards: Array<{
+      title: string | null;
+      name: null;
+      description: string | null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+      pageHeaderImage: null;
+      _type: "card";
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    ctas?: Array<{
+      _key: string;
+    } & CallToAction>;
+    theme?: "dark" | "light" | "muted";
+    centerAligned?: boolean;
+    layout?: "carousel" | "grid";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "hero";
+    eyebrow?: string;
+    heading?: string;
+    subHeading?: string;
+    content?: string;
+    ctas: Array<{
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    bgImage?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      loading?: "eager" | "lazy";
+      _type: "image";
+    };
+    theme?: "dark" | "light" | "muted";
+    layout?: "floated" | "stacked";
+    overlayOpacity?: "0" | "100" | "20" | "40" | "60" | "80";
+    textAlign?: "center" | "left";
+    alignItems?: "center" | "end" | "justify" | "start";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "heroSplit";
+    eyebrow?: string;
+    heading?: string;
+    subHeading?: string;
+    content?: string;
+    ctas: Array<{
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      onRight?: boolean;
+      loading?: "eager" | "lazy";
+      _type: "image";
+    };
+    theme?: "dark" | "light" | "muted";
+    textAlign?: "center" | "left";
+    alignItems?: "center" | "end" | "justify" | "start";
+    enabled?: boolean;
   } | {
     _key: string;
     _type: "infoSection";
+    eyebrow?: string;
     heading?: string;
-    subheading?: string;
+    subHeading?: string;
     content: Array<{
+      _key: string;
+      _type: "accordion";
+      items?: Array<{
+        summary?: string;
+        content?: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        open?: boolean;
+        _key: string;
+      }>;
+      markDefs: null;
+    } | {
       children?: Array<{
         marks?: Array<string>;
         text?: string;
@@ -585,29 +1267,444 @@ export type GetPageQueryResult = {
       level?: number;
       _type: "block";
       _key: string;
+    } | {
+      _key: string;
+      _type: "gallery";
+      images?: Array<{
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        caption?: string;
+        _key: string;
+      }>;
+      markDefs: null;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+      markDefs: null;
     }> | null;
+    ctas: Array<{
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    theme?: "dark" | "light" | "muted";
+    textAlign?: "center" | "left";
+    layout?: "floated" | "stacked";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "testimonials";
+    testimonials: Array<{
+      name: string | null;
+      jobTitle: string | null;
+      content: string | null;
+      picture: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+    }> | null;
+    theme?: "dark" | "light" | "muted";
+    enabled?: boolean;
+  }> | null;
+} | null;
+// Variable: getHomePageQuery
+// Query: *[_type == 'page' && slug.current == 'index'][0]{    _id,    _type,    name,    slug,    heading,    subHeading,    pageHeaderImage,    eyebrow,    content,    theme,    ctas[]{        link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }     },    metadata,      "pageBuilder": pageBuilder[]{    ...,    _type == "callToAction" => {        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  },    },    _type == "hero" => {      ...,      ctas[]{          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }       },    },    _type == "heroSplit" => {      ...,      ctas[]{          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }       },    },    _type == "infoSection" => {      ...,      ctas[]{          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }       },    },    _type == 'testimonials' => { testimonials[]->{      name,      jobTitle,      content,      picture,    }},    _type == 'cards' => {       cards[]{        title,        name,        description,        image,        pageHeaderImage,        _type,          link {    ...,      _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    },      },      dynamicCards[]->{        title,        name,        description,        image,        _type,        metadata,        'link': {          'linkType': _type,          "page": slug.current,          "post": slug.current        },      },    },    _type == "infoSection" => {      content[]{        ...,        markDefs[]{          ...,            _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }        }      },    },  },  }
+export type GetHomePageQueryResult = {
+  _id: string;
+  _type: "page";
+  name: string | null;
+  slug: Slug | null;
+  heading: string | null;
+  subHeading: string | null;
+  pageHeaderImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  eyebrow: string | null;
+  content: string | null;
+  theme: "dark" | "light" | "muted" | null;
+  ctas: Array<{
+    link: {
+      _type: "link";
+      label?: string;
+      linkType?: "href" | "page" | "post";
+      href?: string;
+      page: string | null;
+      post: string | null;
+      openInNewTab?: boolean;
+    } | null;
+  }> | null;
+  metadata: Metadata | null;
+  pageBuilder: Array<{
+    _key: string;
+    _type: "cards";
+    eyebrow?: string;
+    heading?: string;
+    source?: "dynamic" | "static";
+    dynamicCards: Array<{
+      title: null;
+      name: string | null;
+      description: null;
+      image: null;
+      _type: "page";
+      metadata: Metadata | null;
+      link: {
+        linkType: "page";
+        page: string | null;
+        post: string | null;
+      };
+    } | {
+      title: null;
+      name: string | null;
+      description: null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+      _type: "person";
+      metadata: Metadata | null;
+      link: {
+        linkType: "person";
+        page: null;
+        post: null;
+      };
+    } | {
+      title: string | null;
+      name: null;
+      description: null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+      _type: "post";
+      metadata: Metadata | null;
+      link: {
+        linkType: "post";
+        page: string | null;
+        post: string | null;
+      };
+    }> | null;
+    cards: Array<{
+      title: string | null;
+      name: null;
+      description: string | null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+      pageHeaderImage: null;
+      _type: "card";
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    ctas?: Array<{
+      _key: string;
+    } & CallToAction>;
+    theme?: "dark" | "light" | "muted";
+    centerAligned?: boolean;
+    layout?: "carousel" | "grid";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "hero";
+    eyebrow?: string;
+    heading?: string;
+    subHeading?: string;
+    content?: string;
+    ctas: Array<{
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    bgImage?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      loading?: "eager" | "lazy";
+      _type: "image";
+    };
+    theme?: "dark" | "light" | "muted";
+    layout?: "floated" | "stacked";
+    overlayOpacity?: "0" | "100" | "20" | "40" | "60" | "80";
+    textAlign?: "center" | "left";
+    alignItems?: "center" | "end" | "justify" | "start";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "heroSplit";
+    eyebrow?: string;
+    heading?: string;
+    subHeading?: string;
+    content?: string;
+    ctas: Array<{
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      onRight?: boolean;
+      loading?: "eager" | "lazy";
+      _type: "image";
+    };
+    theme?: "dark" | "light" | "muted";
+    textAlign?: "center" | "left";
+    alignItems?: "center" | "end" | "justify" | "start";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "infoSection";
+    eyebrow?: string;
+    heading?: string;
+    subHeading?: string;
+    content: Array<{
+      _key: string;
+      _type: "accordion";
+      items?: Array<{
+        summary?: string;
+        content?: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        open?: boolean;
+        _key: string;
+      }>;
+      markDefs: null;
+    } | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+      listItem?: "bullet" | "number";
+      markDefs: Array<{
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+        _type: "link";
+        _key: string;
+      }> | null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    } | {
+      _key: string;
+      _type: "gallery";
+      images?: Array<{
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        caption?: string;
+        _key: string;
+      }>;
+      markDefs: null;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+      markDefs: null;
+    }> | null;
+    ctas: Array<{
+      link: {
+        _type: "link";
+        label?: string;
+        linkType?: "href" | "page" | "post";
+        href?: string;
+        page: string | null;
+        post: string | null;
+        openInNewTab?: boolean;
+      } | null;
+    }> | null;
+    theme?: "dark" | "light" | "muted";
+    textAlign?: "center" | "left";
+    layout?: "floated" | "stacked";
+    enabled?: boolean;
+  } | {
+    _key: string;
+    _type: "testimonials";
+    testimonials: Array<{
+      name: string | null;
+      jobTitle: string | null;
+      content: string | null;
+      picture: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+    }> | null;
+    theme?: "dark" | "light" | "muted";
+    enabled?: boolean;
   }> | null;
 } | null;
 // Variable: sitemapData
 // Query: *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {    "slug": slug.current,    _type,    _updatedAt,  }
 export type SitemapDataResult = Array<{
-  slug: string;
+  slug: string | null;
   _type: "page";
   _updatedAt: string;
 } | {
-  slug: string;
+  slug: string | null;
   _type: "post";
   _updatedAt: string;
 }>;
 // Variable: allPostsQuery
-// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  image,  "date": coalesce(date, _updatedAt),  "author": author->{name, image},  metadata,  }
 export type AllPostsQueryResult = Array<{
   _id: string;
   status: "draft" | "published";
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  coverImage: {
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: null;
+  image: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -619,12 +1716,11 @@ export type AllPostsQueryResult = Array<{
     crop?: SanityImageCrop;
     alt?: string;
     _type: "image";
-  };
+  } | null;
   date: string;
   author: {
-    firstName: string;
-    lastName: string;
-    picture: {
+    name: string | null;
+    image: {
       asset?: {
         _ref: string;
         _type: "reference";
@@ -636,18 +1732,19 @@ export type AllPostsQueryResult = Array<{
       crop?: SanityImageCrop;
       alt?: string;
       _type: "image";
-    };
+    } | null;
   } | null;
+  metadata: Metadata | null;
 }>;
 // Variable: morePostsQuery
-// Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+// Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  image,  "date": coalesce(date, _updatedAt),  "author": author->{name, image},  metadata,  }
 export type MorePostsQueryResult = Array<{
   _id: string;
   status: "draft" | "published";
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  coverImage: {
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: null;
+  image: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -659,12 +1756,11 @@ export type MorePostsQueryResult = Array<{
     crop?: SanityImageCrop;
     alt?: string;
     _type: "image";
-  };
+  } | null;
   date: string;
   author: {
-    firstName: string;
-    lastName: string;
-    picture: {
+    name: string | null;
+    image: {
       asset?: {
         _ref: string;
         _type: "reference";
@@ -676,11 +1772,12 @@ export type MorePostsQueryResult = Array<{
       crop?: SanityImageCrop;
       alt?: string;
       _type: "image";
-    };
+    } | null;
   } | null;
+  metadata: Metadata | null;
 }>;
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  image,  "date": coalesce(date, _updatedAt),  "author": author->{name, image},  metadata,  }
 export type PostQueryResult = {
   content: Array<{
     children?: Array<{
@@ -692,24 +1789,38 @@ export type PostQueryResult = {
     style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
     listItem?: "bullet" | "number";
     markDefs: Array<{
-      linkType?: "href" | "page" | "post";
       href?: string;
-      page: string | null;
-      post: string | null;
-      openInNewTab?: boolean;
       _type: "link";
       _key: string;
+      page: null;
+      post: null;
     }> | null;
     level?: number;
     _type: "block";
     _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    caption?: string;
+    alt?: string;
+    loading?: "eager" | "lazy";
+    _type: "image";
+    _key: string;
+    markDefs: null;
   }> | null;
   _id: string;
   status: "draft" | "published";
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  coverImage: {
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: null;
+  image: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -721,12 +1832,11 @@ export type PostQueryResult = {
     crop?: SanityImageCrop;
     alt?: string;
     _type: "image";
-  };
+  } | null;
   date: string;
   author: {
-    firstName: string;
-    lastName: string;
-    picture: {
+    name: string | null;
+    image: {
       asset?: {
         _ref: string;
         _type: "reference";
@@ -738,30 +1848,32 @@ export type PostQueryResult = {
       crop?: SanityImageCrop;
       alt?: string;
       _type: "image";
-    };
+    } | null;
   } | null;
+  metadata: Metadata | null;
 } | null;
 // Variable: postPagesSlugs
 // Query: *[_type == "post" && defined(slug.current)]  {"slug": slug.current}
 export type PostPagesSlugsResult = Array<{
-  slug: string;
+  slug: string | null;
 }>;
 // Variable: pagesSlugs
 // Query: *[_type == "page" && defined(slug.current)]  {"slug": slug.current}
 export type PagesSlugsResult = Array<{
-  slug: string;
+  slug: string | null;
 }>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"settings\"][0]": SettingsQueryResult;
-    "\n  *[_type == 'page' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    \"pageBuilder\": pageBuilder[]{\n      ...,\n      _type == \"callToAction\" => {\n        \n  link {\n      ...,\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n      }\n,\n      },\n      _type == \"infoSection\" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n": GetPageQueryResult;
+    "\n*[_type == \"settings\"][0]{\n  companyName,\n  description,\n  ogImage,\n  address,\n  email,\n  phone,\n  callToAction{ \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n },\n  headerMenu->{ \n\ttitle,\n\titems[]{\n    ...,\n\t\t\n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n,\n\t\tlinks[]{ \n      ...,\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n }\n\t}\n },\n  footerMenu->{ \n\ttitle,\n\titems[]{\n    ...,\n\t\t\n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n,\n\t\tlinks[]{ \n      ...,\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n }\n\t}\n },\n  social->{ \n\ttitle,\n\titems[]{\n    ...,\n\t\t\n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n,\n\t\tlinks[]{ \n      ...,\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n }\n\t}\n },\n}": SettingsQueryResult;
+    "\n  *[_type == 'page' &&\n\t\t\tslug.current == $slug &&\n\t\t\t!(slug.current in ['index', 'posts/*', 'people/*'])\n\t\t][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subHeading,\n    pageHeaderImage,\n    eyebrow,\n    content,\n    theme,\n    ctas[]{\n      \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n    },\n    metadata,\n    \n  \"pageBuilder\": pageBuilder[]{\n    ...,\n    _type == \"callToAction\" => {\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n,\n    },\n    _type == \"hero\" => {\n      ...,\n      ctas[]{\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n      },\n    },\n    _type == \"heroSplit\" => {\n      ...,\n      ctas[]{\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n      },\n    },\n    _type == \"infoSection\" => {\n      ...,\n      ctas[]{\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n      },\n    },\n    _type == 'testimonials' => { testimonials[]->{\n      name,\n      jobTitle,\n      content,\n      picture,\n    }},\n    _type == 'cards' => { \n      cards[]{\n        title,\n        name,\n        description,\n        image,\n        pageHeaderImage,\n        _type,\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n,\n      },\n      dynamicCards[]->{\n        title,\n        name,\n        description,\n        image,\n        _type,\n        metadata,\n        'link': {\n          'linkType': _type,\n          \"page\": slug.current,\n          \"post\": slug.current\n        },\n      },\n    },\n    _type == \"infoSection\" => {\n      content[]{\n        ...,\n        markDefs[]{\n          ...,\n          \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n        }\n      },\n    },\n  },\n\n  }\n": GetPageQueryResult;
+    "\n  *[_type == 'page' && slug.current == 'index'][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subHeading,\n    pageHeaderImage,\n    eyebrow,\n    content,\n    theme,\n    ctas[]{\n      \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n    },\n    metadata,\n    \n  \"pageBuilder\": pageBuilder[]{\n    ...,\n    _type == \"callToAction\" => {\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n,\n    },\n    _type == \"hero\" => {\n      ...,\n      ctas[]{\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n      },\n    },\n    _type == \"heroSplit\" => {\n      ...,\n      ctas[]{\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n      },\n    },\n    _type == \"infoSection\" => {\n      ...,\n      ctas[]{\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n \n      },\n    },\n    _type == 'testimonials' => { testimonials[]->{\n      name,\n      jobTitle,\n      content,\n      picture,\n    }},\n    _type == 'cards' => { \n      cards[]{\n        title,\n        name,\n        description,\n        image,\n        pageHeaderImage,\n        _type,\n        \n  link {\n    ...,\n    \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n,\n      },\n      dynamicCards[]->{\n        title,\n        name,\n        description,\n        image,\n        _type,\n        metadata,\n        'link': {\n          'linkType': _type,\n          \"page\": slug.current,\n          \"post\": slug.current\n        },\n      },\n    },\n    _type == \"infoSection\" => {\n      content[]{\n        ...,\n        markDefs[]{\n          ...,\n          \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n        }\n      },\n    },\n  },\n\n  }\n": GetHomePageQueryResult;
     "\n  *[_type == \"page\" || _type == \"post\" && defined(slug.current)] | order(_type asc) {\n    \"slug\": slug.current,\n    _type,\n    _updatedAt,\n  }\n": SitemapDataResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{firstName, lastName, picture},\n\n  }\n": AllPostsQueryResult;
-    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{firstName, lastName, picture},\n\n  }\n": MorePostsQueryResult;
-    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{firstName, lastName, picture},\n\n  }\n": PostQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  image,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{name, image},\n  metadata,\n\n  }\n": AllPostsQueryResult;
+    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  image,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{name, image},\n  metadata,\n\n  }\n": MorePostsQueryResult;
+    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == \"link\" => {\n    \"page\": page->slug.current,\n    \"post\": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  image,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{name, image},\n  metadata,\n\n  }\n": PostQueryResult;
     "\n  *[_type == \"post\" && defined(slug.current)]\n  {\"slug\": slug.current}\n": PostPagesSlugsResult;
     "\n  *[_type == \"page\" && defined(slug.current)]\n  {\"slug\": slug.current}\n": PagesSlugsResult;
   }

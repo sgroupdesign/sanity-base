@@ -1,8 +1,8 @@
-import createImageUrlBuilder from "@sanity/image-url";
 import { Link } from "@/sanity.types";
 import { dataset, projectId, studioUrl } from "@/sanity/lib/api";
-import { createDataAttribute, CreateDataAttributeProps } from "next-sanity";
 import { getImageDimensions } from "@sanity/asset-utils";
+import createImageUrlBuilder from "@sanity/image-url";
+import { createDataAttribute, CreateDataAttributeProps } from "next-sanity";
 
 const imageBuilder = createImageUrlBuilder({
   projectId: projectId || "",
@@ -62,7 +62,11 @@ export function linkResolver(link: Link | undefined) {
       return link.href || null;
     case "page":
       if (link?.page && typeof link.page === "string") {
-        return `/${link.page}`;
+        if (link.page == "index") {
+          return "/";
+        } else {
+          return `/${link.page}`;
+        }
       }
     case "post":
       if (link?.post && typeof link.post === "string") {

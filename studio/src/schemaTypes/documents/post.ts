@@ -1,6 +1,7 @@
 import {DocumentTextIcon} from '@sanity/icons'
 import {format, parseISO} from 'date-fns'
 import {defineField, defineType} from 'sanity'
+import imageBlock from '../fragments/image-block'
 
 /**
  * Post schema.  Define and edit the fields for the 'post' content type.
@@ -12,12 +13,17 @@ export const post = defineType({
   title: 'Post',
   icon: DocumentTextIcon,
   type: 'document',
+  groups: [
+    {name: 'content', default: true},
+    {name: 'seo', title: 'SEO'},
+  ],
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
       validation: (rule) => rule.required(),
+      group: 'content',
     }),
     defineField({
       name: 'slug',
@@ -30,20 +36,18 @@ export const post = defineType({
         isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
       validation: (rule) => rule.required(),
+      group: 'content',
     }),
     defineField({
       name: 'content',
       title: 'Content',
-      type: 'blockContent',
+      type: 'array',
+      of: [{type: 'block'}, imageBlock],
+      group: 'content',
     }),
     defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-    }),
-    defineField({
-      name: 'coverImage',
-      title: 'Cover Image',
+      name: 'image',
+      title: 'Image',
       type: 'image',
       options: {
         hotspot: true,
@@ -60,7 +64,7 @@ export const post = defineType({
           validation: (rule) => {
             // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
             return rule.custom((alt, context) => {
-              if ((context.document?.coverImage as any)?.asset?._ref && !alt) {
+              if ((context.document?.image as any)?.asset?._ref && !alt) {
                 return 'Required'
               }
               return true
@@ -69,32 +73,39 @@ export const post = defineType({
         },
       ],
       validation: (rule) => rule.required(),
+      group: 'content',
     }),
     defineField({
       name: 'date',
       title: 'Date',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
+      group: 'content',
     }),
     defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
       to: [{type: 'person'}],
+      group: 'content',
+    }),
+    defineField({
+      name: 'metadata',
+      type: 'metadata',
+      group: 'seo',
     }),
   ],
   // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {
     select: {
       title: 'title',
-      authorFirstName: 'author.firstName',
-      authorLastName: 'author.lastName',
+      authorName: 'author.name',
       date: 'date',
-      media: 'coverImage',
+      media: 'image',
     },
-    prepare({title, media, authorFirstName, authorLastName, date}) {
+    prepare({title, media, authorName, date}) {
       const subtitles = [
-        authorFirstName && authorLastName && `by ${authorFirstName} ${authorLastName}`,
+        authorName && `by ${authorName}`,
         date && `on ${format(parseISO(date), 'LLL d, yyyy')}`,
       ].filter(Boolean)
 

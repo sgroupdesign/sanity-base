@@ -28,5 +28,9 @@ export default function ResolvedLink({
       </Link>
     );
   }
-  return <>{children}</>;
+  return (
+    <a id={typeof resolvedLink} href={link}>
+      {children}
+    </a>
+  );
 }

@@ -1,6 +1,7 @@
-import {CogIcon} from '@sanity/icons'
-import type {StructureBuilder, StructureResolver} from 'sanity/structure'
+import {IoMdSettings} from 'react-icons/io'
+
 import pluralize from 'pluralize-esm'
+import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 
 /**
  * Structure builder is useful whenever you want to control how documents are grouped and
@@ -23,7 +24,7 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
         }),
       // Settings Singleton in order to view/edit the one particular document for Settings.  Learn more about Singletons: https://www.sanity.io/docs/create-a-link-to-a-single-edit-page-in-your-main-document-type-list
       S.listItem()
-        .title('Site Settings')
+        .title('Settings')
         .child(S.document().schemaType('settings').documentId('siteSettings'))
-        .icon(CogIcon),
+        .icon(IoMdSettings),
     ])

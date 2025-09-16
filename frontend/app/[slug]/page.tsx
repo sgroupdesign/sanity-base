@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Head from "next/head";
 
 import PageBuilderPage from "@/app/components/PageBuilder";
+import { GetPageQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/live";
 import { getPageQuery, pagesSlugs } from "@/sanity/lib/queries";
-import { GetPageQueryResult } from "@/sanity.types";
-import { PageOnboarding } from "@/app/components/Onboarding";
+import PageHeader from "../components/PageHeader";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -39,8 +39,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   });
 
   return {
-    title: page?.name,
-    description: page?.heading,
+    title: page?.metadata?.title ?? page?.name,
+    description: page?.metadata?.description ?? page?.heading,
+    robots: {
+      index: !page?.metadata?.noIndex,
+    },
   } satisfies Metadata;
 }
 
@@ -50,33 +53,20 @@ export default async function Page(props: Props) {
     sanityFetch({ query: getPageQuery, params }),
   ]);
 
-  if (!page?._id) {
-    return (
-      <div className="py-40">
-        <PageOnboarding />
-      </div>
-    );
-  }
-
   return (
-    <div className="my-12 lg:my-24">
+    <div className="">
       <Head>
-        <title>{page.heading}</title>
+        <title>{page?.heading}</title>
       </Head>
-      <div className="">
-        <div className="container">
-          <div className="pb-6 border-b border-gray-100">
-            <div className="max-w-3xl">
-              <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-7xl">
-                {page.heading}
-              </h2>
-              <p className="mt-4 text-base lg:text-lg leading-relaxed text-gray-600 uppercase font-light">
-                {page.subheading}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        content={page?.content ?? ""}
+        ctas={page?.ctas ?? ""}
+        eyebrow={page?.eyebrow ?? ""}
+        heading={page?.heading ?? page?.name ?? ""}
+        subHeading={page?.subHeading ?? ""}
+        theme={page?.theme ?? "light"}
+        image={page?.pageHeaderImage ?? ""}
+      />
       <PageBuilderPage page={page as GetPageQueryResult} />
     </div>
   );

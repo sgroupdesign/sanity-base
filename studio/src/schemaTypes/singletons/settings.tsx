@@ -1,7 +1,5 @@
 import {CogIcon} from '@sanity/icons'
-import {defineArrayMember, defineField, defineType} from 'sanity'
-
-import * as demo from '../../lib/initialValues'
+import {defineField, defineType} from 'sanity'
 
 /**
  * Settings schema Singleton.  Singletons are single documents that are displayed not in a collection, handy for things like site settings and other global configurations.
@@ -13,103 +11,67 @@ export const settings = defineType({
   title: 'Settings',
   type: 'document',
   icon: CogIcon,
+  groups: [
+    {name: 'general', title: 'General', default: true},
+    {name: 'navigation', title: 'Navigation'},
+  ],
   fields: [
     defineField({
-      name: 'title',
-      description: 'This field is the title of your blog.',
-      title: 'Title',
+      name: 'companyName',
+      title: 'Company Name',
       type: 'string',
-      initialValue: demo.title,
+      group: 'general',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description',
-      description: 'Used on the Homepage',
       title: 'Description',
-      type: 'array',
-      initialValue: demo.description,
-      of: [
-        // Define a minified block content field for the description. https://www.sanity.io/docs/block-content
-        defineArrayMember({
-          type: 'block',
-          options: {},
-          styles: [],
-          lists: [],
-          marks: {
-            decorators: [],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  defineField({
-                    name: 'linkType',
-                    title: 'Link Type',
-                    type: 'string',
-                    initialValue: 'href',
-                    options: {
-                      list: [
-                        {title: 'URL', value: 'href'},
-                        {title: 'Page', value: 'page'},
-                        {title: 'Post', value: 'post'},
-                      ],
-                      layout: 'radio',
-                    },
-                  }),
-                  defineField({
-                    name: 'href',
-                    title: 'URL',
-                    type: 'url',
-                    hidden: ({parent}) => parent?.linkType !== 'href' && parent?.linkType != null,
-                    validation: (Rule) =>
-                      Rule.custom((value, context: any) => {
-                        if (context.parent?.linkType === 'href' && !value) {
-                          return 'URL is required when Link Type is URL'
-                        }
-                        return true
-                      }),
-                  }),
-                  defineField({
-                    name: 'page',
-                    title: 'Page',
-                    type: 'reference',
-                    to: [{type: 'page'}],
-                    hidden: ({parent}) => parent?.linkType !== 'page',
-                    validation: (Rule) =>
-                      Rule.custom((value, context: any) => {
-                        if (context.parent?.linkType === 'page' && !value) {
-                          return 'Page reference is required when Link Type is Page'
-                        }
-                        return true
-                      }),
-                  }),
-                  defineField({
-                    name: 'post',
-                    title: 'Post',
-                    type: 'reference',
-                    to: [{type: 'post'}],
-                    hidden: ({parent}) => parent?.linkType !== 'post',
-                    validation: (Rule) =>
-                      Rule.custom((value, context: any) => {
-                        if (context.parent?.linkType === 'post' && !value) {
-                          return 'Post reference is required when Link Type is Post'
-                        }
-                        return true
-                      }),
-                  }),
-                  defineField({
-                    name: 'openInNewTab',
-                    title: 'Open in new tab',
-                    type: 'boolean',
-                    initialValue: false,
-                  }),
-                ],
-              },
-            ],
-          },
-        }),
-      ],
+      type: 'text',
+      group: 'general',
+      rows: 3,
+      validation: (Rule) => Rule.max(160).warning(),
+    }),
+    defineField({
+      name: 'address',
+      title: 'Address',
+      type: 'text',
+      group: 'general',
+      rows: 2,
+    }),
+    defineField({
+      name: 'email',
+      type: 'string',
+      group: 'general',
+    }),
+    defineField({
+      name: 'phone',
+      type: 'string',
+      group: 'general',
+    }),
+    defineField({
+      name: 'callToAction',
+      title: 'Call-to-action (Site-wide)',
+      description: 'Add a site-wide CTA to the header.',
+      type: 'callToAction',
+      group: 'general',
+    }),
+    defineField({
+      name: 'headerMenu',
+      type: 'reference',
+      to: [{type: 'navigation'}],
+      group: 'navigation',
+    }),
+    defineField({
+      name: 'footerMenu',
+      type: 'reference',
+      to: [{type: 'navigation'}],
+      group: 'navigation',
+    }),
+    defineField({
+      name: 'social',
+      type: 'reference',
+      to: [{type: 'navigation'}],
+      group: 'navigation',
     }),
     defineField({
       name: 'ogImage',

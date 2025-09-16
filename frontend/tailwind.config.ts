@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
+import type { Config } from "tailwindcss";
 
 export default {
   content: ["./app/**/*.{ts,tsx}", "./sanity/**/*.{ts,tsx}"],
@@ -13,6 +13,7 @@ export default {
         layer: "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
       },
       colors: {
+        background: "var(--color-background)",
         black: "#0d0e12",
         white: "#fff",
         cyan: {
@@ -96,6 +97,10 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-inter)"],
+      },
+      aspectRatio: {
+        "4/3": "4 / 3",
+        "21/9": "21 / 9",
       },
     },
   },

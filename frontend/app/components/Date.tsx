@@ -11,7 +11,7 @@ export default function DateComponent({
 
   return (
     <time dateTime={dateString} className="">
-      {format(new Date(dateString), "LLLL	d, yyyy")}
+      {format(new Date(dateString), "d LLLL yyyy")}
     </time>
   );
 }

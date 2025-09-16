@@ -2,12 +2,10 @@
 
 import { SanityDocument } from "next-sanity";
 import { useOptimistic } from "next-sanity/hooks";
-import Link from "next/link";
 
 import BlockRenderer from "@/app/components/BlockRenderer";
 import { GetPageQueryResult } from "@/sanity.types";
 import { dataAttr } from "@/sanity/lib/utils";
-import { studioUrl } from "@/sanity/lib/api";
 
 type PageBuilderPageProps = {
   page: GetPageQueryResult;
@@ -30,7 +28,7 @@ type PageData = {
 
 function renderSections(
   pageBuilderSections: PageBuilderSection[],
-  page: GetPageQueryResult,
+  page: GetPageQueryResult
 ) {
   if (!page) {
     return null;
@@ -60,26 +58,6 @@ function renderEmptyState(page: GetPageQueryResult) {
   if (!page) {
     return null;
   }
-  return (
-    <div className="container">
-      <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
-        This page has no content!
-      </h1>
-      <p className="mt-2 text-base text-gray-500">
-        Open the page in Sanity Studio to add content.
-      </p>
-      <div className="mt-10 flex">
-        <Link
-          className="rounded-full flex gap-2 mr-6 items-center bg-black hover:bg-brand focus:bg-blue py-3 px-6 text-white transition-colors duration-200"
-          href={`${studioUrl}/structure/intent/edit/template=page;type=page;path=pageBuilder;id=${page._id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Add content to this page
-        </Link>
-      </div>
-    </div>
-  );
 }
 
 export default function PageBuilder({ page }: PageBuilderPageProps) {
@@ -100,7 +78,7 @@ export default function PageBuilder({ page }: PageBuilderPageProps) {
       // Reconcile References. https://www.sanity.io/docs/enabling-drag-and-drop#ffe728eea8c1
       return action.document.pageBuilder.map(
         (section) =>
-          currentSections?.find((s) => s._key === section?._key) || section,
+          currentSections?.find((s) => s._key === section?._key) || section
       );
     }
 

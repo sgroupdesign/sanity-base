@@ -36,7 +36,7 @@ export default function Card(props: CardProps) {
           <div className="">
             {subTitle && <p className="text-gray-500 text-base">{subTitle}</p>}
 
-            {link ? (
+            {link && link.linkType != 'person' ? (
               <h4 className="h4">
                 <ResolvedLink link={link}>{title}</ResolvedLink>
               </h4>

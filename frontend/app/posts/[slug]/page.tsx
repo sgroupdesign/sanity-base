@@ -1,15 +1,13 @@
-import type { Metadata, ResolvingMetadata } from "next";
-import { notFound } from "next/navigation";
+import type {Metadata, ResolvingMetadata} from 'next'
+import {notFound} from 'next/navigation'
 
-import Avatar from "@/app/components/Avatar";
-import CoverImage from "@/app/components/CoverImage";
-import PortableText from "@/app/components/PortableText";
-import { MorePosts } from "@/app/components/Posts";
-import { sanityFetch } from "@/sanity/lib/live";
-import { postPagesSlugs, postQuery } from "@/sanity/lib/queries";
-import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { type PortableTextBlock } from "next-sanity";
-import { Suspense } from "react";
+import Avatar from '@/app/components/Avatar'
+import CoverImage from '@/app/components/CoverImage'
+import PortableText from '@/app/components/PortableText'
+import {sanityFetch} from '@/sanity/lib/live'
+import {postPagesSlugs, postQuery} from '@/sanity/lib/queries'
+import {resolveOpenGraphImage} from '@/sanity/lib/utils'
+import {type PortableTextBlock} from 'next-sanity'
 
 type Props = {
   params: Promise<{slug: string}>
@@ -33,22 +31,19 @@ export async function generateStaticParams() {
  * Generate metadata for the page.
  * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
-export async function generateMetadata(
-  props: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const params = await props.params;
-  const { data: post } = await sanityFetch({
+export async function generateMetadata(props: Props, parent: ResolvingMetadata): Promise<Metadata> {
+  const params = await props.params
+  const {data: post} = await sanityFetch({
     query: postQuery,
     params,
     // Metadata should never contain stega
     stega: false,
-  });
-  const previousImages = (await parent).openGraph?.images || [];
-  const ogImage = resolveOpenGraphImage(post?.image);
+  })
+  const previousImages = (await parent).openGraph?.images || []
+  const ogImage = resolveOpenGraphImage(post?.image)
 
   return {
-    authors: post?.author?.name ? [{ name: `${post.author.name}` }] : [],
+    authors: post?.author?.name ? [{name: `${post.author.name}`}] : [],
     title: post?.metadata?.title ?? post?.title,
     description: post?.metadata?.description,
     openGraph: {
@@ -67,16 +62,13 @@ export default async function PostPage(props: Props) {
 
   return (
     <>
-      <section
-        className="relative py-6 lg:p-20 bg-background text-foreground"
-        data-theme="muted"
-      >
+      <section className="relative py-6 lg:p-20 bg-background text-foreground" data-theme="muted">
         <div className="container relative grid grid-cols-1 gap-8 lg:gap-x-20 lg:grid-cols-2 items-center">
           <div className="lg:order-1">
             {post.image && (
               <CoverImage
                 image={post.image}
-                loading={"lazy"}
+                loading={'lazy'}
                 className=""
                 width={1500}
                 height={1500}
@@ -93,37 +85,17 @@ export default async function PostPage(props: Props) {
                   {post.title && <h1 className="h1">{post.title}</h1>}
                 </div>
 
-                {post.author && (
-                  <Avatar
-                    person={post.author}
-                    date={post.date}
-                    key={post._id}
-                  />
-                )}
+                {post.author && <Avatar person={post.author} date={post.date} key={post._id} />}
               </div>
             </div>
           </div>
         </div>
       </section>
-      <div className="">
-        <div className="container my-12 lg:my-24 max-w-5xl">
-          <article className="richtext">
-            {post.content?.length && (
-              <PortableText value={post.content as PortableTextBlock[]} />
-            )}
-          </article>
-        </div>
+      <div className="container my-12 lg:my-24">
+        <article className="richtext max-w-5xl">
+          {post.content?.length && <PortableText value={post.content as PortableTextBlock[]} />}
+        </article>
       </div>
-      <section
-        className="relative py-6 lg:p-20 bg-background text-foreground"
-        data-theme="muted"
-      >
-        <div className="container">
-          <aside>
-            <Suspense>{await MorePosts({ skip: post._id, limit: 3 })}</Suspense>
-          </aside>
-        </div>
-      </section>
     </>
   )
 }

@@ -3,6 +3,7 @@ import {navigation} from './documents/navigation'
 import {page} from './documents/page'
 import {person} from './documents/person'
 import {post} from './documents/post'
+import {project} from './documents/project'
 import {redirect} from './documents/redirect'
 import {testimonial} from './documents/testimonial'
 import accordion from './objects/accordion'
@@ -27,6 +28,7 @@ export const schemaTypes = [
   settings,
   // Document
   page,
+  project,
   post,
   person,
   form,

@@ -1,37 +1,34 @@
-"use client";
+'use client'
 
-import { SanityDocument } from "next-sanity";
-import { useOptimistic } from "next-sanity/hooks";
+import {SanityDocument} from 'next-sanity'
+import {useOptimistic} from 'next-sanity/hooks'
 
-import BlockRenderer from "@/app/components/BlockRenderer";
-import { GetPageQueryResult } from "@/sanity.types";
-import { dataAttr } from "@/sanity/lib/utils";
+import BlockRenderer from '@/app/components/BlockRenderer'
+import {GetPageQueryResult} from '@/sanity.types'
+import {dataAttr} from '@/sanity/lib/utils'
 
 type PageBuilderPageProps = {
-  page: GetPageQueryResult;
-};
+  page: GetPageQueryResult
+}
 
 type PageBuilderSection = {
-  _key: string;
-  _type: string;
-};
+  _key: string
+  _type: string
+}
 
 type PageData = {
-  _id: string;
-  _type: string;
-  pageBuilder?: PageBuilderSection[];
-};
+  _id: string
+  _type: string
+  pageBuilder?: PageBuilderSection[]
+}
 
 /**
  * The PageBuilder component is used to render the blocks from the `pageBuilder` field in the Page type in your Sanity Studio.
  */
 
-function renderSections(
-  pageBuilderSections: PageBuilderSection[],
-  page: GetPageQueryResult
-) {
+function renderSections(pageBuilderSections: PageBuilderSection[], page: GetPageQueryResult) {
   if (!page) {
-    return null;
+    return null
   }
   return (
     <div
@@ -51,16 +48,16 @@ function renderSections(
         />
       ))}
     </div>
-  );
+  )
 }
 
 function renderEmptyState(page: GetPageQueryResult) {
   if (!page) {
-    return null;
+    return null
   }
 }
 
-export default function PageBuilder({ page }: PageBuilderPageProps) {
+export default function PageBuilder({page}: PageBuilderPageProps) {
   const pageBuilderSections = useOptimistic<
     PageBuilderSection[] | undefined,
     SanityDocument<PageData>
@@ -70,27 +67,26 @@ export default function PageBuilder({ page }: PageBuilderPageProps) {
 
     // If the edit was to a different document, ignore it
     if (action.id !== page?._id) {
-      return currentSections;
+      return currentSections
     }
 
     // If there are sections in the updated document, use them
     if (action.document.pageBuilder) {
       // Reconcile References. https://www.sanity.io/docs/enabling-drag-and-drop#ffe728eea8c1
       return action.document.pageBuilder.map(
-        (section) =>
-          currentSections?.find((s) => s._key === section?._key) || section
-      );
+        (section) => currentSections?.find((s) => s._key === section?._key) || section,
+      )
     }
 
     // Otherwise keep the current sections
-    return currentSections;
-  });
+    return currentSections
+  })
 
   if (!page) {
-    return renderEmptyState(page);
+    return renderEmptyState(page)
   }
 
   return pageBuilderSections && pageBuilderSections.length > 0
     ? renderSections(pageBuilderSections, page)
-    : renderEmptyState(page);
+    : renderEmptyState(page)
 }

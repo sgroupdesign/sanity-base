@@ -36,6 +36,8 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
   switch (documentType) {
     case 'post':
       return slug ? `/posts/${slug}` : undefined
+    case 'project':
+      return slug ? `/projects/${slug}` : undefined
     case 'page':
       return slug ? `/${slug}` : undefined
     default:
@@ -53,6 +55,9 @@ export default defineConfig({
   dataset,
 
   plugins: [
+    structureTool({
+      structure, // Custom studio structure configuration, imported from ./src/structure.ts
+    }),
     // Presentation tool configuration for Visual Editing
     presentationTool({
       previewUrl: {
@@ -65,16 +70,16 @@ export default defineConfig({
         // The Main Document Resolver API provides a method of resolving a main document from a given route or route pattern. https://www.sanity.io/docs/presentation-resolver-api#57720a5678d9
         mainDocuments: defineDocuments([
           {
-            route: '/',
-            filter: `_type == "settings" && _id == "siteSettings"`,
-          },
-          {
             route: '/:slug',
             filter: `_type == "page" && slug.current == $slug || _id == $slug`,
           },
           {
             route: '/posts/:slug',
             filter: `_type == "post" && slug.current == $slug || _id == $slug`,
+          },
+          {
+            route: '/projects/:slug',
+            filter: `_type == "project" && slug.current == $slug || _id == $slug`,
           },
         ]),
         // Locations Resolver API allows you to define where data is being used in your application. https://www.sanity.io/docs/presentation-resolver-api#8d8bca7bfcd7
@@ -110,6 +115,10 @@ export default defineConfig({
                   href: resolveHref('post', doc?.slug)!,
                 },
                 {
+                  title: doc?.title || 'Untitled',
+                  href: resolveHref('project', doc?.slug)!,
+                },
+                {
                   title: 'Home',
                   href: '/',
                 } satisfies DocumentLocation,
@@ -118,9 +127,6 @@ export default defineConfig({
           }),
         },
       },
-    }),
-    structureTool({
-      structure, // Custom studio structure configuration, imported from ./src/structure.ts
     }),
     // Additional plugins for enhanced functionality
     unsplashImageAsset(),

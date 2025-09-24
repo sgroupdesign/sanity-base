@@ -60,7 +60,7 @@ body {
 }
 
 .btn {
-  @apply px-6 py-3.5 bg-foreground text-background text-base duration-300 ease-in-out hover:bg-foreground/80;
+  @apply px-6 py-3.5 bg-foreground text-background text-base duration-300 ease-in-out hover:bg-foreground/80 rounded-br-xl rounded-tl-xl;
   &.secondary {
     @apply bg-gray-300 text-black ;
   }

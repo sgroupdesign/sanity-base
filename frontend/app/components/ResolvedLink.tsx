@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { linkResolver } from '@/sanity/lib/utils'
+import {linkResolver} from '@/sanity/lib/utils'
 
 interface ResolvedLinkProps {
   link: any
@@ -28,5 +28,5 @@ export default function ResolvedLink({link, children, className}: ResolvedLinkPr
     <a id={typeof resolvedLink} href={link}>
       {children}
     </a>
-  );
+  )
 }

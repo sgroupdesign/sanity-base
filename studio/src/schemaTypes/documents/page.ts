@@ -1,5 +1,5 @@
-import { GrDocument } from 'react-icons/gr'
-import { defineField, defineType } from 'sanity'
+import {GrDocument} from 'react-icons/gr'
+import {defineField, defineType} from 'sanity'
 
 /**
  * Page schema.  Define and edit the fields for the 'page' content type.
@@ -88,6 +88,17 @@ export const page = defineType({
         layout: 'radio',
       },
       initialValue: 'light',
+      group: 'pageHeader',
+    }),
+    defineField({
+      name: 'overlay',
+      type: 'string',
+      options: {
+        list: ['0', '20', '40', '60'],
+        layout: 'radio',
+      },
+      initialValue: '0',
+      description: 'Darkern your image, the higher the number the darker the overlay',
       group: 'pageHeader',
     }),
     defineField({

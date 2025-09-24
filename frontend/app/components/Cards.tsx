@@ -1,20 +1,20 @@
-import type { Cards } from "@/sanity.types";
-import { stegaClean } from "next-sanity";
-import Card from "./Card";
+import type {Cards} from '@/sanity.types'
+import {stegaClean} from 'next-sanity'
+import Card from './Card'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./ui/carousel";
+} from './ui/carousel'
 
 type CardsProps = {
-  block: Cards;
-  index: number;
-};
+  block: Cards
+  index: number
+}
 
-export default function Cards({ block, index }: CardsProps) {
+export default function Cards({block, index}: CardsProps) {
   return (
     <section
       className="relative py-6 lg:p-20 bg-background text-foreground"
@@ -29,9 +29,9 @@ export default function Cards({ block, index }: CardsProps) {
           </div>
         </div>
 
-        {block.layout == "grid" ? (
+        {block.layout == 'grid' ? (
           <div className="flex flex-wrap -ml-10">
-            {block.source == "static" &&
+            {block.source == 'static' &&
               block.cards?.map((card: any, key: any) => (
                 <Card
                   image={card.image}
@@ -42,15 +42,15 @@ export default function Cards({ block, index }: CardsProps) {
                   index={key}
                 />
               ))}
-            {block.source == "dynamic" &&
+            {block.source == 'dynamic' &&
               block.dynamicCards?.map((card: any, key: any) => (
                 <Card
-                  image={card.metadata?.image ?? ""}
+                  image={card.metadata?.image ?? ''}
                   key={key}
                   title={card.name ?? card.title}
                   subTitle={card._type}
                   index={key}
-                  link={card.link ?? ""}
+                  link={card.link ?? ''}
                 />
               ))}
           </div>
@@ -61,12 +61,9 @@ export default function Cards({ block, index }: CardsProps) {
               <CarouselNext />
             </div>
             <CarouselContent className="-ml-10">
-              {block.source == "static" &&
+              {block.source == 'static' &&
                 block.cards?.map((card: any, key: any) => (
-                  <CarouselItem
-                    key={key}
-                    className="basis-full md:basis-1/2 lg:basis-1/3 p-0"
-                  >
+                  <CarouselItem key={key} className="basis-full md:basis-1/2 lg:basis-1/3 p-0">
                     <Card
                       image={card.image}
                       title={card.title}
@@ -76,18 +73,15 @@ export default function Cards({ block, index }: CardsProps) {
                     />
                   </CarouselItem>
                 ))}
-              {block.source == "dynamic" &&
+              {block.source == 'dynamic' &&
                 block.dynamicCards?.map((card: any, key: any) => (
-                  <CarouselItem
-                    key={key}
-                    className="basis-full md:basis-1/2 lg:basis-1/3 p-0"
-                  >
+                  <CarouselItem key={key} className="basis-full md:basis-1/2 lg:basis-1/3 p-0">
                     <Card
-                      image={card.metadata?.image ?? ""}
+                      image={card.metadata?.image ?? ''}
                       title={card.name ?? card.title}
-                      subTitle={card._type}
+                      subTitle={card._type == 'project' || card._type == 'post' ? card._type : ''}
                       index={key}
-                      link={card.link ?? ""}
+                      link={card.link ?? ''}
                     />
                   </CarouselItem>
                 ))}
@@ -96,5 +90,5 @@ export default function Cards({ block, index }: CardsProps) {
         )}
       </div>
     </section>
-  );
+  )
 }

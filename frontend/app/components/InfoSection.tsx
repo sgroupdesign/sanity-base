@@ -1,16 +1,16 @@
-import { stegaClean, type PortableTextBlock } from "next-sanity";
+import {stegaClean, type PortableTextBlock} from 'next-sanity'
 
-import PortableText from "@/app/components/PortableText";
-import { cn } from "@/lib/utils";
-import { InfoSection } from "@/sanity.types";
-import ResolvedLink from "./ResolvedLink";
+import PortableText from '@/app/components/PortableText'
+import {cn} from '@/lib/utils'
+import {InfoSection} from '@/sanity.types'
+import ResolvedLink from './ResolvedLink'
 
 type InfoProps = {
-  block: InfoSection;
-  index: number;
-};
+  block: InfoSection
+  index: number
+}
 
-export default function CTA({ block }: InfoProps) {
+export default function CTA({block}: InfoProps) {
   return (
     <section
       className="relative py-6 lg:p-20 bg-background text-foreground"
@@ -18,25 +18,23 @@ export default function CTA({ block }: InfoProps) {
     >
       <div
         className={cn(
-          "container",
-          stegaClean(block.textAlign) == "center"
-            ? "items-center"
-            : "items-start"
+          'container',
+          stegaClean(block.textAlign) == 'center' ? 'items-center' : 'items-start',
         )}
       >
         <div
           className={cn(
-            "relative flex w-full flex-col",
-            stegaClean(block.textAlign) == "center" && "mx-auto text-center",
-            stegaClean(block.layout) == "stacked" && "lg:max-w-5/6"
+            'relative flex w-full flex-col',
+            stegaClean(block.textAlign) == 'center' && 'mx-auto text-center',
+            stegaClean(block.layout) == 'stacked' && 'lg:max-w-5/6',
           )}
         >
           <div
             className={cn(
-              "flex gap-6",
-              stegaClean(block.layout) == "floated"
-                ? "justify-between h-full w-full gap-20 items-end"
-                : "items-start flex-col"
+              'flex gap-6',
+              stegaClean(block.layout) == 'floated'
+                ? 'justify-between h-full w-full lg:gap-20 lg:items-end flex-col lg:flex-row'
+                : 'items-start flex-col',
             )}
           >
             <div className="flex flex-col gap-6 flex-1">
@@ -44,23 +42,18 @@ export default function CTA({ block }: InfoProps) {
 
               {block.heading && <h2 className="h2">{block.heading}</h2>}
 
-              {block.subHeading && (
-                <p className="text-2xl">{block.subHeading}</p>
-              )}
+              {block.subHeading && <p className="text-2xl">{block.subHeading}</p>}
             </div>
 
             <div className="flex flex-col gap-y-6 flex-1">
               {block.content && (
-                <PortableText
-                  className=""
-                  value={block.content as PortableTextBlock[]}
-                />
+                <PortableText className="" value={block.content as PortableTextBlock[]} />
               )}
 
               <div className="flex gap-4">
                 {block.ctas?.map((cta: any, key: any) => (
                   <ResolvedLink
-                    className={cn("btn", key === 1 && "secondary")}
+                    className={cn('btn', key === 1 && 'secondary')}
                     link={cta.link}
                     key={key}
                   >
@@ -73,5 +66,5 @@ export default function CTA({ block }: InfoProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -8,11 +8,7 @@
  *
  */
 
-import {
-  PortableText,
-  type PortableTextBlock,
-  type PortableTextComponents,
-} from "next-sanity";
+import {PortableText, type PortableTextBlock, type PortableTextComponents} from 'next-sanity'
 
 import {
   Carousel,
@@ -20,87 +16,75 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/app/components/ui/carousel";
+} from '@/app/components/ui/carousel'
 
-import ResolvedLink from "@/app/components/ResolvedLink";
+import ResolvedLink from '@/app/components/ResolvedLink'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/app/components/ui/accordion";
-import { Accordion as AccordionType, Gallery } from "@/sanity.types";
-import { urlForImage } from "@/sanity/lib/utils";
-import { Image } from "next-sanity/image";
+} from '@/app/components/ui/accordion'
+import {Accordion as AccordionType, Gallery} from '@/sanity.types'
+import {urlForImage} from '@/sanity/lib/utils'
+import {Image} from 'next-sanity/image'
 
 export default function CustomPortableText({
   className,
   value,
 }: {
-  className?: string;
-  value: PortableTextBlock[];
+  className?: string
+  value: PortableTextBlock[]
 }) {
   const components: PortableTextComponents = {
     marks: {
-      link: ({ children, value: link }) => {
-        return <ResolvedLink link={link}>{children}</ResolvedLink>;
+      link: ({children, value: link}) => {
+        return <ResolvedLink link={link}>{children}</ResolvedLink>
       },
     },
     types: {
-      image: ({ value }) => (
+      image: ({value}) => (
         <div className="my-8">
           <Image
-            alt={value?.alt}
+            alt={value?.alt ?? 'Image'}
             className="w-full"
             height={450}
             width={800}
-            src={
-              urlForImage(value)
-                ?.width(800)
-                .height(450)
-                .fit("crop")
-                .url() as string
-            }
+            src={urlForImage(value)?.width(800).height(450).fit('crop').url() as string}
           />
         </div>
       ),
-      accordion: ({ value }: { value: AccordionType }) => {
+      accordion: ({value}: {value: AccordionType}) => {
         return (
           <div className="w-full">
             <div className="mt-4 [&+p]:mt-4 not-prose text-left">
               <Accordion type="single" collapsible>
                 {value.items?.map((item, index) => (
-                  <AccordionItem value={"item-" + index} key={item._key}>
+                  <AccordionItem value={'item-' + index} key={item._key}>
                     <AccordionTrigger>{item.summary}</AccordionTrigger>
                     <AccordionContent>
-                      <PortableText
-                        value={item.content as PortableTextBlock[]}
-                      />
+                      <PortableText value={item.content as PortableTextBlock[]} />
                     </AccordionContent>
                   </AccordionItem>
                 ))}
               </Accordion>
             </div>
           </div>
-        );
+        )
       },
-      gallery: ({ value }: { value: Gallery }) => {
+      gallery: ({value}: {value: Gallery}) => {
         return (
           <Carousel className="my-6">
             <CarouselContent>
               {value.images?.map((item) => (
                 <CarouselItem key={item._key} className="">
                   <Image
-                    alt={item?.caption ?? "image"}
+                    alt={item?.caption ?? 'image'}
                     className="w-full"
                     width={800}
                     height={450}
                     src={
-                      urlForImage(item.image)
-                        ?.width(800)
-                        .height(450)
-                        .fit("crop")
-                        .url() as string
+                      urlForImage(item.image)?.width(800).height(450).fit('crop').url() as string
                     }
                   />
                 </CarouselItem>
@@ -111,14 +95,14 @@ export default function CustomPortableText({
               <CarouselNext />
             </div>
           </Carousel>
-        );
+        )
       },
     },
-  };
+  }
 
   return (
-    <div className={["", className].filter(Boolean).join(" ")}>
+    <div className={['', className].filter(Boolean).join(' ')}>
       <PortableText components={components} value={value} />
     </div>
-  );
+  )
 }

@@ -15,7 +15,8 @@ const postFields = /* groq */ `
 const linkReference = /* groq */ `
   _type == "link" => {
     "page": page->slug.current,
-    "post": post->slug.current
+    "post": post->slug.current,
+    "project": project->slug.current,
   }
 `
 
@@ -117,7 +118,8 @@ export const pageBuilerQuery = /* groq */ `
         'link': {
           'linkType': _type,
           "page": slug.current,
-          "post": slug.current
+          "post": slug.current,
+          "project": slug.current,
         },
       },
     },
@@ -133,10 +135,31 @@ export const pageBuilerQuery = /* groq */ `
   },
 `
 
+export const getProjectQuery = defineQuery(`
+  *[_type == 'project' &&
+			slug.current == $slug][0]{
+    _id,
+    _type,
+    title,
+    slug,
+    heading,
+    pageHeaderImage,
+    theme,
+    overlay,
+    metadata,
+    body,
+    images[],
+    projectInfo{
+      heading,
+      text,
+    }[],
+  }
+`)
+
 export const getPageQuery = defineQuery(`
   *[_type == 'page' &&
 			slug.current == $slug &&
-			!(slug.current in ['index', 'posts/*', 'people/*', '404'])
+			!(slug.current in ['index', 'posts/*', 'people/*', '404', 'projects/*'])
 		][0]{
     _id,
     _type,
@@ -148,6 +171,7 @@ export const getPageQuery = defineQuery(`
     eyebrow,
     content,
     theme,
+    overlay,
     ctas[]{
       ${linkFields} 
     },
@@ -168,6 +192,7 @@ export const getHomePageQuery = defineQuery(`
     eyebrow,
     content,
     theme,
+    overlay,
     ctas[]{
       ${linkFields} 
     },
@@ -188,6 +213,7 @@ export const get404PageQuery = defineQuery(`
     eyebrow,
     content,
     theme,
+    overlay,
     ctas[]{
       ${linkFields} 
     },
@@ -197,7 +223,7 @@ export const get404PageQuery = defineQuery(`
 `)
 
 export const sitemapData = defineQuery(`
-  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {
+  *[_type == "page" || _type == "post" || _type == "project" && defined(slug.current)] | order(_type asc) {
     "slug": slug.current,
     _type,
     _updatedAt,
@@ -231,6 +257,11 @@ export const postQuery = defineQuery(`
 
 export const postPagesSlugs = defineQuery(`
   *[_type == "post" && defined(slug.current)]
+  {"slug": slug.current}
+`)
+
+export const projectPagesSlugs = defineQuery(`
+  *[_type == "project" && defined(slug.current)]
   {"slug": slug.current}
 `)
 

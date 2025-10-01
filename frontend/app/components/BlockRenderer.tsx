@@ -1,11 +1,11 @@
 import React from "react";
 
 import Cards from "@/app/components/Cards";
-import Cta from "@/app/components/Cta";
 import Hero from "@/app/components/Hero";
 import HeroSplit from "@/app/components/HeroSplit";
 import Info from "@/app/components/InfoSection";
 import Testimonials from "@/app/components/Testimonials";
+import { cn } from "@/lib/utils";
 import { dataAttr } from "@/sanity/lib/utils";
 
 type BlocksType = {
@@ -16,6 +16,7 @@ type BlockType = {
   _type: string;
   _key: string;
   enabled: boolean;
+  theme: string;
 };
 
 type BlockProps = {
@@ -26,7 +27,6 @@ type BlockProps = {
 };
 
 const Blocks: BlocksType = {
-  callToAction: Cta,
   infoSection: Info,
   heroSplit: HeroSplit,
   hero: Hero,
@@ -53,6 +53,13 @@ export default function BlockRenderer({
       <div
         key={block._key}
         data-type={block._type}
+        data-theme={block.theme}
+        className={cn(
+          "relative  bg-background text-foreground",
+          block._type != "hero" && "py-6 lg:p-20",
+          "theme-" + block.theme,
+          "[&+.theme-" + block.theme + "]:-mt-20"
+        )}
         data-sanity={dataAttr({
           id: pageId,
           type: pageType,

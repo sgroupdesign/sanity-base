@@ -13,7 +13,7 @@ export const textAlign = {
     layout: 'radio',
     list: ['left', 'center'],
   },
-  initialValue: 'center',
+  initialValue: 'left',
   group: 'options',
 } satisfies FieldDefinition
 

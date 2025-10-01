@@ -16,6 +16,7 @@ export const navigation = defineType({
       name: 'items',
       type: 'array',
       of: [{type: 'link'}, {type: 'link.list'}],
+      validation: (Rule) => Rule.max(6).warning('You can only have a maximum of 6 menu items.'), // Sets a maximum of 6 items
     }),
   ],
   preview: {

@@ -3,6 +3,7 @@ import {navigation} from './documents/navigation'
 import {page} from './documents/page'
 import {person} from './documents/person'
 import {post} from './documents/post'
+import {project} from './documents/project'
 import {redirect} from './documents/redirect'
 import {testimonial} from './documents/testimonial'
 import accordion from './objects/accordion'
@@ -17,6 +18,7 @@ import {infoSection} from './objects/infoSection'
 import {link} from './objects/link'
 import linkList from './objects/link.list'
 import metadata from './objects/metadata'
+import {portableTextSimpleType as portableTextSimple} from './objects/portableTextSimpleType'
 import testimonials from './objects/testimonials'
 import {settings} from './singletons/settings'
 
@@ -27,6 +29,7 @@ export const schemaTypes = [
   settings,
   // Document
   page,
+  project,
   post,
   person,
   form,
@@ -38,6 +41,7 @@ export const schemaTypes = [
   blockContent,
   infoSection,
   callToAction,
+  portableTextSimple,
   gallery,
   link,
   linkList,

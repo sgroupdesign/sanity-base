@@ -13,7 +13,7 @@ export default function Hero({ block, index }: InfoProps) {
   return (
     <section
       className={cn(
-        "relative flex flex-col text-foreground",
+        "relative flex flex-col",
         block.layout == "stacked" ? "h-auto" : "h-[80vh]"
       )}
       data-theme={stegaClean(block.theme)}

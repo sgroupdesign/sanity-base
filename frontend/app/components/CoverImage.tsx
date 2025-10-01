@@ -6,25 +6,31 @@ import { Image } from "next-sanity/image";
 interface CoverImageProps {
   image: any;
   priority?: boolean;
-  className: string;
+  className?: string;
   width: number;
-  height: number;
+  height?: number;
   loading: any;
 }
 
 export default function CoverImage(props: CoverImageProps) {
   const { image: source, priority, className, loading, width, height } = props;
   const image = source?.asset?._ref ? (
-    <Image
-      className={className}
-      width={width ?? getImageDimensions(source).width}
-      height={height ?? getImageDimensions(source).height}
-      alt={stegaClean(source?.alt) || ""}
-      src={urlForImage(source)?.url() as string}
-      priority={priority}
-      loading={loading}
-    />
+    <div className="">
+      <Image
+        className={className}
+        width={width ?? getImageDimensions(source).width}
+        height={height ?? getImageDimensions(source).height}
+        alt={stegaClean(source?.alt) || ""}
+        src={urlForImage(source)?.url() as string}
+        priority={priority}
+        loading={loading}
+        style={{
+          objectPosition: `${(source.hotspot?.x || 0.5) * 100}% ${
+            (source.hotspot?.y || 0.5) * 100
+          }%`,
+        }}
+      />
+    </div>
   ) : null;
-
   return <>{image}</>;
 }

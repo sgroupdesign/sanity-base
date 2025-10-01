@@ -4,9 +4,8 @@ import Head from "next/head";
 import PageBuilderPage from "@/app/components/PageBuilder";
 import { GetPageQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/live";
-import { getPageQuery, pagesSlugs } from "@/sanity/lib/queries";
-import { notFound } from "next/navigation";
-import PageHeader from "../components/PageHeader";
+import { get404PageQuery, pagesSlugs } from "@/sanity/lib/queries";
+import PageHeader from "./components/PageHeader";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -30,20 +29,21 @@ export async function generateStaticParams() {
  * Generate metadata for the page.
  * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
+
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const { data: page } = await sanityFetch({
-    query: getPageQuery,
+    query: get404PageQuery,
     params,
     // Metadata should never contain stega
     stega: false,
   });
 
   return {
-    title: page?.metadata?.title ?? page?.title,
+    title: page?.metadata?.title ?? page?.name,
     description: page?.metadata?.description ?? page?.heading,
     robots: {
-      index: !page?.metadata?.noIndex,
+      index: false,
     },
   } satisfies Metadata;
 }
@@ -51,10 +51,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function Page(props: Props) {
   const params = await props.params;
   const [{ data: page }] = await Promise.all([
-    sanityFetch({ query: getPageQuery, params }),
+    sanityFetch({ query: get404PageQuery, params }),
   ]);
-
-  if (!page) notFound();
 
   return (
     <div className="">
@@ -65,7 +63,7 @@ export default async function Page(props: Props) {
         content={page?.content ?? ""}
         ctas={page?.ctas ?? ""}
         eyebrow={page?.eyebrow ?? ""}
-        heading={page?.heading ?? page?.title ?? ""}
+        heading={page?.heading ?? page?.name ?? ""}
         subHeading={page?.subHeading ?? ""}
         theme={page?.theme ?? "light"}
         image={page?.pageHeaderImage ?? ""}

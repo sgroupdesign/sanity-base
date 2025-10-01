@@ -18,8 +18,8 @@ export const page = defineType({
   ],
   fields: [
     defineField({
-      name: 'name',
-      title: 'Name',
+      name: 'title',
+      title: 'Title',
       type: 'string',
       validation: (Rule) => Rule.required(),
       group: 'content',
@@ -31,7 +31,7 @@ export const page = defineType({
       type: 'slug',
       validation: (Rule) => Rule.required(),
       options: {
-        source: 'name',
+        source: 'title',
         maxLength: 96,
       },
       description: 'URL path. Use "index" for the homepage.',
@@ -50,6 +50,17 @@ export const page = defineType({
           type: 'string',
         }),
       ],
+      group: 'pageHeader',
+    }),
+    defineField({
+      name: 'overlay',
+      type: 'string',
+      options: {
+        list: ['0', '20', '40', '60'],
+        layout: 'radio',
+      },
+      initialValue: '0',
+      description: 'Darkern your image, the higher the number the darker the overlay',
       group: 'pageHeader',
     }),
     defineField({
@@ -84,7 +95,7 @@ export const page = defineType({
       name: 'theme',
       type: 'string',
       options: {
-        list: ['light', 'dark', 'muted'],
+        list: ['light', 'dark'],
         layout: 'radio',
       },
       initialValue: 'light',

@@ -27,8 +27,7 @@ export default defineType({
     }),
     defineField({
       name: 'content',
-      type: 'text',
-      rows: 3,
+      type: 'portableTextSimple',
       group: 'content',
     }),
     defineField({

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -7,9 +7,7 @@
 @plugin "tailwindcss-animate";
 
 @utility container {
-  margin: 0 auto;
-  padding: 0 2rem;
-  max-width: 1535px;
+  @apply max-w-[1535px] px-4 lg:px-8 mx-auto;
 }
 
 @theme {
@@ -33,9 +31,10 @@
   --color-gray-950: #13141b;
   --color-background: #fff;
   --color-foreground: #000;
+  --color-borders: #eeeef1;
 
-  --font-display: "Inter", "sans-serif";
-  --font-sans: "Inter", "sans-serif";
+  --font-display: 'Inter', 'sans-serif';
+  --font-sans: 'Inter', 'sans-serif';
 
   --default-transition-duration: 250ms;
 }
@@ -43,16 +42,19 @@
 [data-theme="light"] {
   --color-background: #fff;
   --color-foreground: #000;
+  --color-borders: #eeeef1;
 }
 
 [data-theme="dark"] {
   --color-background: #000;
   --color-foreground: #fff;
+  --color-borders: #eeeef1;
 }
 
 [data-theme="muted"] {
   --color-background: var(--color-gray-100);
   --color-foreground: #000;
+  --color-borders: #bbbdc9;
 }
 
 body {
@@ -60,7 +62,7 @@ body {
 }
 
 .btn {
-  @apply px-6 py-3.5 bg-foreground text-background text-base duration-300 ease-in-out hover:bg-foreground/80;
+  @apply px-6 py-3.5 bg-foreground text-background text-base duration-300 ease-in-out hover:bg-foreground/80 rounded-br-xl rounded-tl-xl;
   &.secondary {
     @apply bg-gray-300 text-black ;
   }
@@ -70,11 +72,7 @@ h1, h2, h3, h4, h5, h6 {
   @apply font-semibold leading-tight;
 }
 
-h1 {
-  @apply text-3xl lg:text-6xl;
-}
-
-h2 {
+h1, h2 {
   @apply text-3xl lg:text-6xl;
 }
 
@@ -92,10 +90,18 @@ h4 {
 
 .richtext {
   h1, h2, h3, h4, h5, h6 {
-    @apply mb-6;
+    @apply my-6;
   }
   p {
-    @apply mb-4;
+    @apply my-4;
+  }
+  h2 {
+    @apply text-3xl lg:text-4xl;
+  }
+  .accordion {
+    & h3 {
+      @apply my-0;
+    }
   }
 }
 
@@ -123,4 +129,10 @@ h4 {
 
 blockquote {
   @apply border-l-2 border-gray-200 pl-4 my-8 italic text-lg;
+}
+
+.stretched-link {
+  & :after {
+    @apply absolute inset-0 z-10 content-none;
+  }
 }

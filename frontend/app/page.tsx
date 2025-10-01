@@ -40,8 +40,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   });
 
   return {
-    title: page?.metadata?.title ?? page?.name,
-    description: page?.metadata?.description ?? page?.heading,
+    title: page?.heading ?? page?.metadata?.title ?? page?.name,
+    description: page?.metadata?.description,
     robots: {
       index: !page?.metadata?.noIndex,
     },
@@ -67,6 +67,7 @@ export default async function Page(props: Props) {
         subHeading={page?.subHeading ?? ""}
         theme={page?.theme ?? "light"}
         image={page?.pageHeaderImage ?? ""}
+        overlay={page?.overlay}
       />
       <PageBuilderPage page={page as GetPageQueryResult} />
     </div>

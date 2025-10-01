@@ -68,6 +68,10 @@ export function linkResolver(link: Link | undefined) {
           return `/${link.page}`;
         }
       }
+    case "project":
+      if (link?.project && typeof link.project === "string") {
+        return `/projects/${link.project}`;
+      }
     case "post":
       if (link?.post && typeof link.post === "string") {
         return `/posts/${link.post}`;

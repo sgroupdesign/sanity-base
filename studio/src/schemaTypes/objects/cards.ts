@@ -33,7 +33,13 @@ export default defineType({
       name: 'dynamicCards',
       title: 'Dynamic cards',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'page'}, {type: 'person'}, {type: 'post'}]}],
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'page'}, {type: 'person'}, {type: 'project'}, {type: 'post'}],
+        },
+      ],
+
       group: 'content',
       hidden: ({parent}) => parent?.source !== 'dynamic',
     }),

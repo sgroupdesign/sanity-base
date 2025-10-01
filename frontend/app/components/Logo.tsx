@@ -13,7 +13,7 @@ export default function Logo(props: LogoProps) {
         type == "dark" ? "text-white" : "text-black"
       )}
     >
-      Jumpkit
+      HiVis Built
     </div>
   );
 }

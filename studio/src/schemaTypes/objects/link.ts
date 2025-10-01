@@ -27,6 +27,7 @@ export const link = defineType({
           {title: 'URL', value: 'href'},
           {title: 'Page', value: 'page'},
           {title: 'Post', value: 'post'},
+          {title: 'Project', value: 'project'},
         ],
         layout: 'radio',
       },
@@ -76,10 +77,36 @@ export const link = defineType({
         }),
     }),
     defineField({
+      name: 'project',
+      title: 'Project',
+      type: 'reference',
+      to: [{type: 'project'}],
+      hidden: ({parent}) => parent?.linkType !== 'project',
+      validation: (Rule) =>
+        // Custom validation to ensure project reference is provided if the link type is 'project'
+        Rule.custom((value, context: any) => {
+          if (context.parent?.linkType === 'project' && !value) {
+            return 'Project reference is required when Link Type is project'
+          }
+          return true
+        }),
+    }),
+    defineField({
       name: 'openInNewTab',
       title: 'Open in new tab',
       type: 'boolean',
       initialValue: false,
     }),
   ],
+  preview: {
+    select: {
+      label: 'label',
+      title: 'page.title',
+      projectName: 'project.title',
+      blogTitle: 'posts.title',
+    },
+    prepare: ({label, title, projectName, blogTitle}) => ({
+      title: label || title || blogTitle || projectName,
+    }),
+  },
 })

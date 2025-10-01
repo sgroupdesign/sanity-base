@@ -7,6 +7,7 @@ import {assist} from '@sanity/assist'
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {unsplashImageAsset} from 'sanity-plugin-asset-source-unsplash'
+import {media} from 'sanity-plugin-media'
 import {
   defineDocuments,
   defineLocations,
@@ -38,6 +39,8 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
       return slug ? `/posts/${slug}` : undefined
     case 'page':
       return slug ? `/${slug}` : undefined
+    case 'project':
+      return slug ? `/projects/${slug}` : undefined
     default:
       console.warn('Invalid document type:', documentType)
       return undefined
@@ -53,6 +56,9 @@ export default defineConfig({
   dataset,
 
   plugins: [
+    structureTool({
+      structure, // Custom studio structure configuration, imported from ./src/structure.ts
+    }),
     // Presentation tool configuration for Visual Editing
     presentationTool({
       previewUrl: {
@@ -75,6 +81,10 @@ export default defineConfig({
           {
             route: '/posts/:slug',
             filter: `_type == "post" && slug.current == $slug || _id == $slug`,
+          },
+          {
+            route: '/projects/:slug',
+            filter: `_type == "project" && slug.current == $slug || _id == $slug`,
           },
         ]),
         // Locations Resolver API allows you to define where data is being used in your application. https://www.sanity.io/docs/presentation-resolver-api#8d8bca7bfcd7
@@ -119,9 +129,7 @@ export default defineConfig({
         },
       },
     }),
-    structureTool({
-      structure, // Custom studio structure configuration, imported from ./src/structure.ts
-    }),
+    media(),
     // Additional plugins for enhanced functionality
     unsplashImageAsset(),
     assist(),

@@ -4,10 +4,10 @@ import { settingsQuery } from "@/sanity/lib/queries";
 
 import {
   FaEnvelope,
+  FaFacebook,
   FaGithub,
   FaInstagram,
   FaLinkedin,
-  FaSquareFacebook,
   FaTiktok,
   FaXTwitter,
   FaYoutube,
@@ -43,7 +43,7 @@ export default async function Social({
                 <Icon
                   url={item.href}
                   aria-label={item.label}
-                  fontSize={"1.2rem"}
+                  fontSize={"2rem"}
                 />
               </ResolvedLink>
             );
@@ -63,7 +63,7 @@ function Icon({
   if (!url) return null;
 
   return url?.includes("facebook.com") ? (
-    <FaSquareFacebook {...props} />
+    <FaFacebook {...props} />
   ) : url?.includes("github.com") ? (
     <FaGithub {...props} />
   ) : url?.includes("instagram.com") ? (

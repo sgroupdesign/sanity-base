@@ -66,21 +66,17 @@ export default function CustomPortableText({
       ),
       accordion: ({ value }: { value: AccordionType }) => {
         return (
-          <div className="w-full">
-            <div className="mt-4 [&+p]:mt-4 not-prose text-left">
-              <Accordion type="single" collapsible>
-                {value.items?.map((item, index) => (
-                  <AccordionItem value={"item-" + index} key={item._key}>
-                    <AccordionTrigger>{item.summary}</AccordionTrigger>
-                    <AccordionContent>
-                      <PortableText
-                        value={item.content as PortableTextBlock[]}
-                      />
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+          <div className="mt-4 [&+p]:mt-4 not-prose text-left">
+            <Accordion type="single" collapsible className="accordion">
+              {value.items?.map((item, index) => (
+                <AccordionItem value={"item-" + index} key={item._key}>
+                  <AccordionTrigger>{item.summary}</AccordionTrigger>
+                  <AccordionContent>
+                    <PortableText value={item.content as PortableTextBlock[]} />
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         );
       },

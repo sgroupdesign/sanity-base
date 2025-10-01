@@ -1,6 +1,6 @@
-import { MetadataRoute } from "next";
 import { sanityFetch } from "@/sanity/lib/live";
 import { sitemapData } from "@/sanity/lib/queries";
+import { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
 /**
@@ -46,6 +46,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority = 0.5;
           changeFrequency = "never";
           url = `${domain}/posts/${p.slug}`;
+          break;
+        case "project":
+          priority = 0.5;
+          changeFrequency = "never";
+          url = `${domain}/projects/${p.slug}`;
           break;
       }
       sitemap.push({

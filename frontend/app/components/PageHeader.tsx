@@ -1,16 +1,19 @@
 import { cn } from "@/lib/utils";
 import { stegaClean } from "next-sanity";
+import { MdArrowOutward } from "react-icons/md";
 import CoverImage from "./CoverImage";
 import ResolvedLink from "./ResolvedLink";
 
 interface PageHeaderProps {
-  theme: string;
-  image: any;
-  content: string;
-  eyebrow: string;
+  theme?: string;
+  image?: any;
+  content?: string;
+  eyebrow?: string;
   heading: string;
-  subHeading: string;
-  ctas: any;
+  subHeading?: string;
+  ctas?: any;
+  projectInfo?: any;
+  overlay?: any;
 }
 
 export default function PageHeader({
@@ -21,21 +24,34 @@ export default function PageHeader({
   heading,
   subHeading,
   ctas,
+  projectInfo,
+  overlay,
 }: PageHeaderProps) {
   return (
     <section
-      className="relative flex flex-col text-foreground h-[80vh]"
+      className={cn(
+        "relative flex flex-col text-foreground rounded-br-4xl overflow-hidden",
+        image ? "h-[80vh]" : "bg-gray-100 h-[30vh]"
+      )}
       data-theme={stegaClean(theme)}
     >
       {image && (
-        <CoverImage
-          image={image}
-          className="absolute inset-0 object-cover w-full h-full"
-          loading={"eager"}
-          width={2000}
-          height={2000}
-          priority={true}
-        />
+        <>
+          <CoverImage
+            image={image}
+            className="absolute object-cover w-screen h-screen"
+            loading={"eager"}
+            width={2000}
+            height={2000}
+            priority={true}
+          />
+          <div
+            className={cn(
+              "absolute inset-0 ",
+              overlay && "bg-black/" + stegaClean(overlay)
+            )}
+          ></div>
+        </>
       )}
 
       <div className="container relative h-full flex flex-col justify-center">
@@ -43,7 +59,7 @@ export default function PageHeader({
           <div className="flex gap-6 flex-col w-full">
             {eyebrow && <p className="eyebrow">{eyebrow}</p>}
 
-            {heading && <h2 className="h2">{heading}</h2>}
+            {heading && <h1 className="h1">{heading}</h1>}
             {subHeading && <p className="text-2xl">{subHeading}</p>}
           </div>
 
@@ -54,14 +70,32 @@ export default function PageHeader({
               <div className="flex gap-4 justify-center">
                 {ctas?.map((cta: any, key: any) => (
                   <ResolvedLink
-                    className={cn("btn", key === 1 && "secondary")}
+                    className={cn(
+                      "btn flex items-center gap-1 ",
+                      key === 1 && "secondary"
+                    )}
                     link={cta.link}
                     key={key}
                   >
                     {cta.link.label}
+                    <MdArrowOutward size={"1rem"} className="" />
                   </ResolvedLink>
                 ))}
               </div>
+            )}
+
+            {projectInfo && (
+              <ul className="flex w-full lg:mt-10 flex-wrap gap-y-8">
+                {projectInfo.map((item: any, key: number) => (
+                  <li
+                    key={key}
+                    className="basis-1/2 lg:basis-1/3 flex flex-col gap-0"
+                  >
+                    <p className="eyebrow text-gray-200">{item.heading}</p>
+                    <p className="text-foreground">{item.text}</p>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
         </div>

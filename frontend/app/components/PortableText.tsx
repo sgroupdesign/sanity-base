@@ -29,9 +29,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/app/components/ui/accordion";
-import { Accordion as AccordionType, Gallery } from "@/sanity.types";
+import { Accordion as AccordionType, Form, Gallery } from "@/sanity.types";
 import { urlForImage } from "@/sanity/lib/utils";
 import { Image } from "next-sanity/image";
+import AddForm from "./Form";
 
 export default function CustomPortableText({
   className,
@@ -108,6 +109,9 @@ export default function CustomPortableText({
             </div>
           </Carousel>
         );
+      },
+      formReference: ({ value }: { value: Form }) => {
+        return <AddForm form={value} />;
       },
     },
   };

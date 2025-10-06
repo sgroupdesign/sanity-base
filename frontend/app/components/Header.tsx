@@ -97,7 +97,7 @@ export default async function Header() {
             </NavigationMenu>
           )}
           <div className="flex items-center gap-4">
-            {settings?.callToAction && (
+            {settings?.callToAction?.link?.label && (
               <ResolvedLink
                 link={settings.callToAction.link}
                 className="btn hidden lg:flex items-center gap-1"

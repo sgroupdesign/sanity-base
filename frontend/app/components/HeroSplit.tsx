@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { HeroSplit } from "@/sanity.types";
 import { stegaClean } from "next-sanity";
+import { MdArrowOutward } from "react-icons/md";
 import CoverImage from "./CoverImage";
 import CustomPortableText from "./PortableTextSimple";
 import ResolvedLink from "./ResolvedLink";
@@ -55,11 +56,15 @@ export default function HeroSplit({ block, index }: InfoProps) {
             <div className="flex gap-4">
               {block.ctas?.map((cta: any, key: any) => (
                 <ResolvedLink
-                  className={cn("btn", key === 1 && "secondary")}
+                  className={cn(
+                    "btn flex items-center gap-1",
+                    key === 1 && "secondary"
+                  )}
                   link={cta.link}
                   key={key}
                 >
                   {cta.link.label}
+                  <MdArrowOutward size={"1rem"} className="" />
                 </ResolvedLink>
               ))}
             </div>

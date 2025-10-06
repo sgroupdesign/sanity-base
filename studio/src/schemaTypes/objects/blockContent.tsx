@@ -113,5 +113,8 @@ export const blockContent = defineType({
     defineArrayMember({
       type: 'gallery',
     }),
+    defineArrayMember({
+      type: 'formReference',
+    }),
   ],
 })

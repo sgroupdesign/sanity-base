@@ -30,7 +30,7 @@ export default function PageHeader({
   return (
     <section
       className={cn(
-        "relative flex flex-col text-foreground rounded-br-4xl overflow-hidden",
+        "relative flex flex-col text-foreground overflow-hidden",
         image ? "h-[80vh]" : "bg-gray-100 h-[30vh]"
       )}
       data-theme={stegaClean(theme)}

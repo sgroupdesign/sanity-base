@@ -35,8 +35,8 @@ export default function Cards({ block, index }: CardsProps) {
                 image={card.image}
                 key={key}
                 title={card.title}
-                subTitle={card._type}
-                link={card.link}
+                subTitle="Birchalls"
+                link={card.link ?? ""}
                 index={key}
               />
             ))}
@@ -46,7 +46,7 @@ export default function Cards({ block, index }: CardsProps) {
                 image={card.metadata?.image ?? ""}
                 key={key}
                 title={card.name ?? card.title}
-                subTitle={card._type}
+                subTitle={card.jobTitle ?? card._type}
                 index={key}
                 link={card.link ?? ""}
               />
@@ -83,7 +83,7 @@ export default function Cards({ block, index }: CardsProps) {
                   <Card
                     image={card.metadata?.image ?? ""}
                     title={card.name ?? card.title}
-                    subTitle={card._type}
+                    subTitle={card.jobTitle ?? card._type}
                     index={key}
                     link={card.link ?? ""}
                   />

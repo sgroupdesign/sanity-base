@@ -15,7 +15,7 @@ export default async function Footer() {
     <div>
       <footer className="bg-black text-white">
         <div className="container py-16">
-          <nav className="flex gap-8 items-start justify-center flex-col lg:flex-row">
+          <nav className="flex gap-8 justify-center items-start flex-col lg:flex-row">
             <div className="flex flex-col gap-8 basis-full lg:basis-1/2">
               <Link className="flex items-center gap-2" href="/">
                 <Logo type="dark" />
@@ -71,7 +71,6 @@ export default async function Footer() {
                   return (
                     <div className="flex flex-col gap-4 basis-1/4" key={key}>
                       <h4 className="h4">{item.label}</h4>
-
                       {item.links && (
                         <div className="flex flex-col gap-1">
                           {item?.links.map((item: any, key: any) => (

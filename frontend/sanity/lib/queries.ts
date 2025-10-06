@@ -55,6 +55,11 @@ const navigationQuery = /* groq */ `
 	}
 `;
 
+const formQuery = /* groq */ `
+  ...,
+	formName,
+`;
+
 export const settingsQuery = defineQuery(`
 *[_type == "settings"][0]{
   companyName,
@@ -94,10 +99,13 @@ export const pageBuilerQuery = /* groq */ `
       },
       content[]{
         ...,
+        form->{
+          ...,
+        },
         markDefs[]{
           ...,
-          ${linkReference}
-        }
+          ${linkReference},
+        },
       },
     },
     _type == 'testimonials' => { testimonials[]->{
@@ -119,6 +127,7 @@ export const pageBuilerQuery = /* groq */ `
       dynamicCards[]->{
         title,
         name,
+        jobTitle,
         description,
         image,
         _type,

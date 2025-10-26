@@ -49,6 +49,8 @@ export default function BlockRenderer({
 
   // Block does exist
   if (typeof Blocks[block._type] !== "undefined") {
+    const typesArray: string[] = ["hero", "gallery"];
+
     return (
       <div
         key={block._key}
@@ -56,9 +58,10 @@ export default function BlockRenderer({
         data-theme={block.theme}
         className={cn(
           "relative  bg-background text-foreground",
-          block._type != "hero" && "py-6 lg:p-20",
-          "theme-" + block.theme,
-          "[&+.theme-" + block.theme + "]:-mt-20"
+          !typesArray.includes(block._type) && "py-6 lg:p-20",
+          block.theme == "light" && "theme-light lg:[&+.theme-light]:pt-0",
+          block.theme == "dark" && "theme-dark lg:[&+.theme-dark]:pt-0",
+          block.theme == "muted" && "theme-muted lg:[&+.theme-muted]:pt-0"
         )}
         data-sanity={dataAttr({
           id: pageId,
@@ -74,6 +77,7 @@ export default function BlockRenderer({
       </div>
     );
   }
+
   // Block doesn't exist yet
   return React.createElement(
     () => (

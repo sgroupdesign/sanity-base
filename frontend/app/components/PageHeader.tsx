@@ -40,7 +40,6 @@ export default function PageHeader({
           <CoverImage
             image={image}
             className="absolute object-cover w-screen h-screen"
-            loading={"eager"}
             width={2000}
             height={2000}
             priority={true}

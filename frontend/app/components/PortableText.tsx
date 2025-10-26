@@ -29,7 +29,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/app/components/ui/accordion";
-import { Accordion as AccordionType, Form, Gallery } from "@/sanity.types";
+import {
+  Accordion as AccordionType,
+  Features,
+  Form,
+  Gallery,
+} from "@/sanity.types";
 import { urlForImage } from "@/sanity/lib/utils";
 import { Image } from "next-sanity/image";
 import AddForm from "./Form";
@@ -112,6 +117,20 @@ export default function CustomPortableText({
       },
       formReference: ({ value }: { value: Form }) => {
         return <AddForm form={value} />;
+      },
+      features: ({ value }: { value: Features }) => {
+        return (
+          <div className="my-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-12 block-features">
+            {value.items?.map((item) => (
+              <div className="" key={item._key}>
+                <h3 className="h3">{item.heading}</h3>
+                <div className="text-sm">
+                  <PortableText value={item.content as PortableTextBlock[]} />
+                </div>
+              </div>
+            ))}
+          </div>
+        );
       },
     },
   };

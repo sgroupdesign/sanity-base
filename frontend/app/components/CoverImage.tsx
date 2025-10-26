@@ -9,11 +9,10 @@ interface CoverImageProps {
   className?: string;
   width: number;
   height?: number;
-  loading: any;
 }
 
 export default function CoverImage(props: CoverImageProps) {
-  const { image: source, priority, className, loading, width, height } = props;
+  const { image: source, priority, className, width, height } = props;
   const image = source?.asset?._ref ? (
     <div className="">
       <Image
@@ -23,7 +22,6 @@ export default function CoverImage(props: CoverImageProps) {
         alt={stegaClean(source?.alt) || ""}
         src={urlForImage(source)?.url() as string}
         priority={priority}
-        loading={loading}
         style={{
           objectPosition: `${(source.hotspot?.x || 0.5) * 100}% ${
             (source.hotspot?.y || 0.5) * 100

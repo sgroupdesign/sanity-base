@@ -27,7 +27,6 @@ export default function Hero({ block, index }: InfoProps) {
               ? "w-full order-1"
               : "absolute inset-0 object-cover w-full h-full"
           )}
-          loading={block.bgImage.loading}
           width={2000}
           height={2000}
         />

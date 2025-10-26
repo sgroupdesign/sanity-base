@@ -22,7 +22,7 @@ export default function CTA({ block }: InfoProps) {
         className={cn(
           "relative flex w-full flex-col",
           stegaClean(block.textAlign) == "center" && "mx-auto text-center",
-          stegaClean(block.layout) == "stacked" && "w-full max-w-4/6"
+          stegaClean(block.layout) == "stacked" && "w-full max-w-10/12"
         )}
       >
         <div

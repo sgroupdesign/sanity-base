@@ -11,6 +11,7 @@ import {blockContent} from './objects/blockContent'
 import {callToAction} from './objects/callToAction'
 import {card} from './objects/card'
 import cards from './objects/cards'
+import features from './objects/features'
 import {formReference} from './objects/formReference'
 import gallery from './objects/gallery'
 import hero from './objects/hero'
@@ -43,6 +44,7 @@ export const schemaTypes = [
   infoSection,
   callToAction,
   formReference,
+  features,
   portableTextSimple,
   gallery,
   link,

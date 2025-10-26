@@ -36,7 +36,6 @@ export default function Card(props: CardProps) {
         >
           <CoverImage
             image={image}
-            loading={image.loading}
             className="w-full absolute inset-0 group-hover:scale-110 transition ease-in-out duration-500"
             width={600}
             height={600}

@@ -78,7 +78,6 @@ export default async function PostPage(props: Props) {
             {post.image && (
               <CoverImage
                 image={post.image}
-                loading={"lazy"}
                 className=""
                 width={1500}
                 height={1500}

@@ -98,7 +98,6 @@ export default async function Page(props: Props) {
                 width={2000}
                 height={1000}
                 className="absolute inset-0 h-full w-full object-cover object-center"
-                loading="lazy"
                 data-key={key}
               />
               {item.caption && (

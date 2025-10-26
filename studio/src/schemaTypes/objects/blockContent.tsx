@@ -111,6 +111,9 @@ export const blockContent = defineType({
       type: 'accordion',
     }),
     defineArrayMember({
+      type: 'features',
+    }),
+    defineArrayMember({
       type: 'gallery',
     }),
     defineArrayMember({

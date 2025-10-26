@@ -29,28 +29,26 @@ export default function Cards({ block, index }: CardsProps) {
 
       {block.layout == "grid" ? (
         <div className="flex flex-wrap -ml-10">
-          {block.source == "static" &&
-            block.cards?.map((card: any, key: any) => (
-              <Card
-                image={card.image}
-                key={key}
-                title={card.title}
-                subTitle="Birchalls"
-                link={card.link ?? ""}
-                index={key}
-              />
-            ))}
-          {block.source == "dynamic" &&
-            block.dynamicCards?.map((card: any, key: any) => (
-              <Card
-                image={card.metadata?.image ?? ""}
-                key={key}
-                title={card.name ?? card.title}
-                subTitle={card.jobTitle ?? card._type}
-                index={key}
-                link={card.link ?? ""}
-              />
-            ))}
+          {block.cards?.map((card: any, key: any) => (
+            <Card
+              image={card.image}
+              key={key}
+              title={card.title}
+              subTitle="Birchalls"
+              link={card.link ?? ""}
+              index={key}
+            />
+          ))}
+          {block.dynamicCards?.map((card: any, key: any) => (
+            <Card
+              image={card.metadata?.image ?? ""}
+              key={key}
+              title={card.name ?? card.title}
+              subTitle={card.jobTitle ?? card._type}
+              index={key}
+              link={card.link ?? ""}
+            />
+          ))}
         </div>
       ) : (
         <Carousel className="">

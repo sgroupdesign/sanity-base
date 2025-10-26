@@ -25,7 +25,6 @@ export default function HeroSplit({ block, index }: InfoProps) {
         {block.image && (
           <CoverImage
             image={block.image}
-            loading={block.image.loading}
             className="w-full"
             width={1200}
             height={1200}

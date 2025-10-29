@@ -50,15 +50,6 @@ export default defineType({
           name: 'alt',
           type: 'string',
         }),
-        defineField({
-          name: 'loading',
-          type: 'string',
-          options: {
-            list: ['lazy', 'eager'],
-            layout: 'radio',
-          },
-          initialValue: 'lazy',
-        }),
       ],
       group: 'image',
       fieldset: 'image',

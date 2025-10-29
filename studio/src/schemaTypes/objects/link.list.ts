@@ -10,6 +10,7 @@ export default defineType({
     defineField({
       name: 'label',
       type: 'string',
+      validation: (Rule) => Rule.max(20).warning(),
     }),
     defineField({
       name: 'links',

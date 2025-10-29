@@ -54,15 +54,6 @@ export default defineType({
           description: 'Display to the right of the content on desktop',
           initialValue: false,
         }),
-        defineField({
-          name: 'loading',
-          type: 'string',
-          options: {
-            list: ['lazy', 'eager'],
-            layout: 'radio',
-          },
-          initialValue: 'lazy',
-        }),
       ],
       group: 'media',
     }),

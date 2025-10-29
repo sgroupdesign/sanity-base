@@ -51,7 +51,13 @@ export default function Cards({ block, index }: CardsProps) {
           ))}
         </div>
       ) : (
-        <Carousel className="">
+        <Carousel
+          className=""
+          opts={{
+            align: "start",
+            skipSnaps: true,
+          }}
+        >
           <div className="flex gap-x-2 basis-1/2 items-end justify-end -mt-10 mb-6">
             <CarouselPrevious />
             <CarouselNext />

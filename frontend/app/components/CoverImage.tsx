@@ -22,11 +22,13 @@ export default function CoverImage(props: CoverImageProps) {
         alt={stegaClean(source?.alt) || ""}
         src={urlForImage(source)?.url() as string}
         priority={priority}
+        fetchPriority={priority ? "high" : "auto"}
         style={{
           objectPosition: `${(source.hotspot?.x || 0.5) * 100}% ${
             (source.hotspot?.y || 0.5) * 100
           }%`,
         }}
+        sizes="(max-width: 768px) 100vw, 50vw"
       />
     </div>
   ) : null;

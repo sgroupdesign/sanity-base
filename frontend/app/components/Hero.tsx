@@ -85,7 +85,7 @@ export default function Hero({ block, index }: InfoProps) {
                   link={cta.link}
                   key={key}
                 >
-                  {cta.link.label}
+                  {cta.link.label ?? cta.link.pageLabel}
                 </ResolvedLink>
               ))}
             </div>
